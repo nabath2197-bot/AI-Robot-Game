@@ -333,9 +333,6 @@ function crystalDraw(c){
   ctx.fillStyle="#7dff5c";
   ctx.fillRect(-8,-8,16,16);
   ctx.restore();
-}
-
-function shoot(){
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 function fireSound(){
@@ -365,10 +362,13 @@ function fireSound(){
   osc.start();
   osc.stop(audioCtx.currentTime + 0.12);
 }
+
+function shoot(){
   if(!running)return;
+
   fireSound();
+
   shots.push({
-    
     x:robot.x,
     y:robot.y-30,
     vy:-8
