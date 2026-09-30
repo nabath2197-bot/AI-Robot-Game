@@ -1,1 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>AI Robot: Core Breaker</title>
 
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#070b14;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  overflow:hidden;
+}
+#game{
+  width:100vw;
+  height:100vh;
+  position:relative;
+  background:
+    radial-gradient(circle at 50% 30%,#182a45 0,#0a1220 42%,#03050a 100%);
+}
+canvas{width:100%;height:100%;display:block}
+
+#hud{
+  position:absolute;
+  top:12px;
+  left:12px;
+  right:12px;
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  pointer-events:none;
+}
+.box{
+  background:rgba(5,12,25,.82);
+  border:1px solid #29d9ff;
+  border-radius:10px;
+  padding:8px 12px;
+  font-size:13px;
+  box-shadow:0 0 12px rgba(41,217,255,.25);
+}
+
+#start,#gameover{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(2,5,12,.88);
+  z-index:5;
+}
+.panel{
+  width:min(90%,420px);
+  padding:28px;
+  text-align:center;
+  border:1px solid #29d9ff;
+  border-radius:20px;
+  background:#09111f;
+  box-shadow:0 0 35px rgba(41,217,255,.25);
+}
+h1{
+  margin:0 0 10px;
+  color:#36e5ff;
+  font-size:30px;
+}
+.sub{color:#a9b8cc;line-height:1.5}
+button{
+  width:100%;
+  margin-top:15px;
+  padding:14px;
+  border:0;
+  border-radius:12px;
+  background:#19c7ff;
+  color:#001018;
+  font-weight:bold;
+  font-size:17px;
+}
+button:active{transform:scale(.97)}
+
+#controls{
+  position:absolute;
+  bottom:18px;
+  left:0;
+  right:0;
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  z-index:3;
+}
+.ctrl{
+  width:62px;
+  height:62px;
+  border-radius:50%;
+  background:rgba(12,28,48,.85);
+  border:1px solid #29d9ff;
+  color:white;
+  font-size:24px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="game">
+<canvas id="canvas"></canvas>
+
+<div id="hud">
+  <div class="box">⚡ CORE: <span id="score">0</span></div>
+  <div class="box">🤖 LEVEL: <span id="level">1</span></div>
+  <div class="box">💎 ENERGY: <span id="energy">100</span></div>
+</div>
+
+<div id="start">
+  <div class="panel">
+    <h1>AI ROBOT</h1>
+    <h2>CORE BREAKER</h2>
+    <p class="sub">
+      Enter the abandoned AI laboratory.<br>
+      Collect energy, avoid drones and destroy
+      the unstable Core.
+    </p>
+    <button onclick="startGame()">START MISSION</button>
+  </div>
+</div>
+
+<div id="gameover" style="display:none">
+  <div class="panel">
+    <h1>MISSION FAILED</h1>
+    <p class="sub">Your AI robot lost its core energy.</p>
+    <h2>Score: <span id="finalScore">0</span></h2>
+    <button onclick="startGame()">PLAY AGAIN</button>
+  </div>
+</div>
+
+<div id="controls">
+  <button class="ctrl" id="left">◀</button>
+  <button class="ctrl" id="fire">⚡</button>
+  <button class="ctrl" id="right">▶</button>
+</div>
+
+</div>
+
+<script>
+const canvas=document.getElementById("canvas");
+const ctx=canvas.getContext("2d");
+
+let W,H;
+function resize(){
+  W=canvas.width=innerWidth*devicePixelRatio;
+  H=canvas.height=innerHeight*devicePixelRatio;
+  ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+  W=innerWidth; H=innerHeight;
+}
+addEventListener("resize",resize);
+resize();
+
+let running=false;
+let score=0;
+let energy=100;
+let level=1;
+let speed=2;
+let last=0;
+let spawn=0;
+
+const robot={
+  x:innerWidth/2,
+  y:innerHeight-130,
+  w:34,
+  h:46,
+  vx:0
+};
+
+let enemies=[];
+let crystals=[];
+let shots=[];
+
+function startGame(){
+  running=true;
+  score=0;
+  energy=100;
+  level=1;
+  speed=2;
+  enemies=[];
+  crystals=[];
+  shots=[];
+  robot.x=W/2;
+  document.getElementById("start").style.display="none";
+  document.getElementById("gameover").style.display="none";
+  updateHUD();
+  requestAnimationFrame(loop);
+}
+
+function updateHUD(){
+  document.getElementById("score").textContent=score;
+  document.getElementById("energy").textContent=Math.max(0,energy);
+  document.getElementById("level").textContent=level;
+}
+
+function robotDraw(){
+  ctx.save();
+  ctx.translate(robot.x,robot.y);
+
+  ctx.shadowBlur=15;
+  ctx.shadowColor="#28e5ff";
+
+  ctx.fillStyle="#142b43";
+  ctx.fillRect(-17,-23,34,46);
+
+  ctx.fillStyle="#35e5ff";
+  ctx.fillRect(-12,-17,24,13);
+
+  ctx.fillStyle="#07101b";
+  ctx.fillRect(-7,-13,14,5);
+
+  ctx.fillStyle="#a8f6ff";
+  ctx.fillRect(-13,8,8,14);
+  ctx.fillRect(5,8,8,14);
+
+  ctx.fillStyle="#35e5ff";
+  ctx.fillRect(-20,-7,5,20);
+  ctx.fillRect(15,-7,5,20);
+
+  ctx.restore();
+}
+
+function enemyDraw(e){
+  ctx.save();
+  ctx.translate(e.x,e.y);
+  ctx.shadowBlur=12;
+  ctx.shadowColor="#ff315c";
+
+  ctx.fillStyle="#38121e";
+  ctx.fillRect(-16,-16,32,32);
+
+  ctx.fillStyle="#ff315c";
+  ctx.fillRect(-10,-5,20,8);
+
+  ctx.fillStyle="#fff";
+  ctx.fillRect(-7,-2,5,3);
+  ctx.fillRect(2,-2,5,3);
+
+  ctx.restore();
+}
+
+function crystalDraw(c){
+  ctx.save();
+  ctx.translate(c.x,c.y);
+  ctx.rotate(Math.PI/4);
+  ctx.shadowBlur=18;
+  ctx.shadowColor="#7dff5c";
+  ctx.fillStyle="#7dff5c";
+  ctx.fillRect(-8,-8,16,16);
+  ctx.restore();
+}
+
+function shoot(){
+  if(!running)return;
+
+  shots.push({
+    x:robot.x,
+    y:robot.y-30,
+    vy:-8
+  });
+}
+
+function spawnEnemy(){
+  enemies.push({
+    x:20+Math.random()*(W-40),
+    y:-30,
+    size:32,
+    vy:speed+Math.random()*2
+  });
+}
+
+function spawnCrystal(){
+  crystals.push({
+    x:20+Math.random()*(W-40),
+    y:-20,
+    vy:2.2
+  });
+}
+
+function hit(a,b,r){
+  return Math.abs(a.x-b.x)<r && Math.abs(a.y-b.y)<r;
+}
+
+function update(dt){
+
+  robot.x+=robot.vx;
+  robot.x=Math.max(25,Math.min(W-25,robot.x));
+
+  spawn+=dt;
+
+  if(spawn>900){
+    spawnEnemy();
+    if(Math.random()>.35)spawnCrystal();
+    spawn=0;
+  }
+
+  enemies.forEach(e=>e.y+=e.vy);
+  crystals.forEach(c=>c.y+=c.vy);
+
+  shots.forEach(s=>s.y+=s.vy);
+
+  for(let i=enemies.length-1;i>=0;i--){
+    const e=enemies[i];
+
+    if(e.y>H+50){
+      enemies.splice(i,1);
+      continue;
+    }
+
+    if(hit(robot,e,35)){
+      energy-=15;
+      enemies.splice(i,1);
+    }
+  }
+
+  for(let i=crystals.length-1;i>=0;i--){
+    const c=crystals[i];
+
+    if(c.y>H+30){
+      crystals.splice(i,1);
+      continue;
+    }
+
+    if(hit(robot,c,30)){
+      energy=Math.min(100,energy+10);
+      score+=25;
+      crystals.splice(i,1);
+    }
+  }
+
+  for(let i=shots.length-1;i>=0;i--){
+    const s=shots[i];
+
+    if(s.y<-20){
+      shots.splice(i,1);
+      continue;
+    }
+
+    for(let j=enemies.length-1;j>=0;j--){
+      if(hit(s,enemies[j],28)){
+        score+=100;
+        enemies.splice(j,1);
+        shots.splice(i,1);
+        break;
+      }
+    }
+  }
+
+  level=1+Math.floor(score/1000);
+  speed=2+level*.25;
+
+  if(energy<=0){
+    gameOver();
+  }
+
+  updateHUD();
+}
+
+function drawBackground(){
+  ctx.fillStyle="#03050a";
+  ctx.fillRect(0,0,W,H);
+
+  ctx.strokeStyle="rgba(41,217,255,.08)";
+  ctx.lineWidth=1;
+
+  for(let x=0;x<W;x+=40){
+    ctx.beginPath();
+    ctx.moveTo(x,0);
+    ctx.lineTo(x,H);
+    ctx.stroke();
+  }
+
+  for(let y=0;y<H;y+=40){
+    ctx.beginPath();
+    ctx.moveTo(0,y);
+    ctx.lineTo(W,y);
+    ctx.stroke();
+  }
+
+  for(let i=0;i<20;i++){
+    let x=(i*97+(Date.now()/20))%W;
+    let y=(i*53)%H;
+    ctx.fillStyle="rgba(80,220,255,.5)";
+    ctx.fillRect(x,y,2,2);
+  }
+}
+
+function draw(){
+  drawBackground();
+
+  crystals.forEach(crystalDraw);
+  enemies.forEach(enemyDraw);
+
+  shots.forEach(s=>{
+    ctx.fillStyle="#fff";
+    ctx.shadowBlur=12;
+    ctx.shadowColor="#29d9ff";
+    ctx.fillRect(s.x-2,s.y,4,15);
+    ctx.shadowBlur=0;
+  });
+
+  robotDraw();
+}
+
+function loop(t){
+  if(!running)return;
+
+  const dt=t-last||16;
+  last=t;
+
+  update(dt);
+  draw();
+
+  requestAnimationFrame(loop);
+}
+
+function gameOver(){
+  running=false;
+  document.getElementById("finalScore").textContent=score;
+  document.getElementById("gameover").style.display="flex";
+}
+
+function hold(button,direction){
+  button.addEventListener("touchstart",e=>{
+    e.preventDefault();
+    robot.vx=direction*5;
+  });
+
+  button.addEventListener("touchend",e=>{
+    e.preventDefault();
+    robot.vx=0;
+  });
+}
+
+hold(document.getElementById("left"),-1);
+hold(document.getElementById("right"),1);
+
+document.getElementById("fire").addEventListener("touchstart",e=>{
+  e.preventDefault();
+  shoot();
+});
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="ArrowLeft")robot.vx=-5;
+  if(e.key==="ArrowRight")robot.vx=5;
+  if(e.key===" "||e.key==="ArrowUp")shoot();
+});
+
+document.addEventListener("keyup",e=>{
+  if(e.key==="ArrowLeft"||e.key==="ArrowRight")robot.vx=0;
+});
+</script>
+
+</body>
+</html>
