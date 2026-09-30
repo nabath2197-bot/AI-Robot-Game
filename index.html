@@ -1,19 +1,28 @@
 
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+
+<meta name="viewport"
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no">
+
 <title>AI ROBOT - CORE BREAKER</title>
 
 <style>
+
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
+  user-select:none;
 }
 
 html,body{
   margin:0;
+  padding:0;
   width:100%;
   height:100%;
   overflow:hidden;
@@ -28,7 +37,12 @@ html,body{
   height:100vh;
   overflow:hidden;
   background:
-    radial-gradient(circle at 50% 35%,#173653 0%,#081321 45%,#010207 100%);
+  radial-gradient(
+    circle at 50% 40%,
+    #123c58 0%,
+    #071827 45%,
+    #010207 100%
+  );
 }
 
 canvas{
@@ -38,134 +52,287 @@ canvas{
   height:100%;
 }
 
+/* HUD */
+
 #hud{
   position:absolute;
-  top:10px;
-  left:8px;
-  right:8px;
-  z-index:5;
+  top:8px;
+  left:7px;
+  right:7px;
+  z-index:10;
+
   display:flex;
   justify-content:space-between;
   gap:5px;
 }
 
-.box{
+.hudBox{
   padding:7px 9px;
-  border:1px solid #21ddff;
+
+  border:1px solid #19ddff;
   border-radius:9px;
-  background:rgba(2,10,20,.88);
-  box-shadow:0 0 12px rgba(0,220,255,.3);
+
+  background:rgba(1,8,18,.88);
+
+  box-shadow:
+  0 0 12px rgba(0,220,255,.25);
+
   font-size:12px;
-  white-space:nowrap;
+  font-weight:bold;
 }
 
-#start,
-#gameover,
-#win{
+/* ENERGY BAR */
+
+#energyBar{
+  position:absolute;
+
+  top:43px;
+  left:10px;
+  right:10px;
+
+  height:6px;
+
+  z-index:10;
+
+  background:#111;
+
+  border-radius:10px;
+
+  overflow:hidden;
+
+  border:1px solid #263b4a;
+}
+
+#energyFill{
+  width:100%;
+  height:100%;
+
+  background:#00ff9d;
+
+  box-shadow:
+  0 0 10px #00ff9d;
+}
+
+/* PANELS */
+
+.panelScreen{
   position:absolute;
   inset:0;
-  z-index:20;
+
+  z-index:50;
+
   display:flex;
   align-items:center;
   justify-content:center;
-  background:rgba(1,4,10,.93);
+
+  background:
+  rgba(1,4,10,.94);
 }
 
 .panel{
-  width:min(90%,420px);
-  padding:27px;
+  width:min(90%,430px);
+
+  padding:25px;
+
   text-align:center;
-  border:1px solid #25ddff;
+
+  border:1px solid #22ddff;
+
   border-radius:20px;
-  background:#07111f;
+
+  background:
+  linear-gradient(
+    180deg,
+    #071727,
+    #030a12
+  );
+
   box-shadow:
-    0 0 35px rgba(0,220,255,.3),
-    inset 0 0 25px rgba(0,120,255,.08);
+  0 0 35px rgba(0,220,255,.28),
+  inset 0 0 30px rgba(0,120,255,.08);
 }
 
 h1{
-  margin:0 0 8px;
-  color:#35e8ff;
-  font-size:30px;
-  text-shadow:0 0 15px #00d9ff;
+  margin:0 0 5px;
+
+  color:#35eaff;
+
+  font-size:31px;
+
+  text-shadow:
+  0 0 15px #00d9ff;
 }
 
 h2{
-  margin:8px 0;
+  margin:7px 0;
 }
 
-.sub{
-  color:#aebdd0;
+.info{
+  color:#aebed0;
   line-height:1.5;
+  font-size:14px;
 }
 
-button{
+.gameButton{
   width:100%;
+
   margin-top:15px;
+
   padding:14px;
+
   border:0;
+
   border-radius:12px;
-  background:#16c9ff;
+
+  background:#13c9ff;
+
   color:#001018;
+
   font-size:17px;
+
   font-weight:bold;
-  box-shadow:0 0 15px rgba(0,220,255,.35);
+
+  box-shadow:
+  0 0 18px rgba(0,220,255,.4);
 }
 
-button:active{
+.gameButton:active{
   transform:scale(.95);
 }
 
+/* AD AREA */
+
+#adBox{
+  position:absolute;
+
+  left:50%;
+  bottom:94px;
+
+  transform:translateX(-50%);
+
+  width:min(88%,360px);
+
+  height:42px;
+
+  z-index:15;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  border:1px dashed #486171;
+
+  border-radius:8px;
+
+  background:rgba(5,12,20,.75);
+
+  color:#718595;
+
+  font-size:10px;
+
+  letter-spacing:1px;
+}
+
+/* CONTROLS */
+
 #controls{
   position:absolute;
-  bottom:22px;
+
   left:0;
   right:0;
-  z-index:10;
+  bottom:18px;
+
+  z-index:20;
+
   display:flex;
+
   justify-content:center;
+
   gap:14px;
 }
 
 .ctrl{
-  width:64px;
-  height:64px;
+  width:65px;
+  height:65px;
+
   margin:0;
   padding:0;
+
   border-radius:50%;
-  background:rgba(7,25,45,.9);
-  color:white;
+
   border:1px solid #20ddff;
+
+  background:rgba(5,25,43,.92);
+
+  color:white;
+
   font-size:25px;
+
+  box-shadow:
+  0 0 12px rgba(0,210,255,.25);
+}
+
+.ctrl:active{
+  transform:scale(.9);
 }
 
 #fire{
-  background:rgba(130,8,20,.9);
-  border-color:#ff4050;
-  box-shadow:0 0 18px rgba(255,30,50,.4);
+  width:72px;
+  height:72px;
+
+  background:
+  radial-gradient(
+    circle,
+    #ff334d,
+    #7d0818
+  );
+
+  border-color:#ff5260;
+
+  box-shadow:
+  0 0 22px rgba(255,30,50,.55);
 }
 
-#timer{
-  color:#ffe600;
-}
+/* DANGER */
 
 #danger{
   position:absolute;
+
   inset:0;
-  z-index:4;
+
+  z-index:5;
+
   pointer-events:none;
-  border:0 solid rgba(255,0,0,0);
+
+  border:0 solid transparent;
 }
 
 .danger{
-  animation:dangerFlash .25s infinite;
+  animation:
+  dangerFlash .25s infinite;
 }
 
 @keyframes dangerFlash{
-  0%{border:4px solid rgba(255,0,0,.05)}
-  50%{border:4px solid rgba(255,0,0,.65)}
-  100%{border:4px solid rgba(255,0,0,.05)}
+
+  0%{
+    border:3px solid rgba(255,0,0,.05);
+  }
+
+  50%{
+    border:5px solid rgba(255,0,0,.7);
+  }
+
+  100%{
+    border:3px solid rgba(255,0,0,.05);
+  }
 }
+
+.hidden{
+  display:none !important;
+}
+
 </style>
 </head>
 
@@ -175,28 +342,37 @@ button:active{
 
 <canvas id="canvas"></canvas>
 
+<!-- HUD -->
+
 <div id="hud">
 
-  <div class="box">
-    ⚡ SCORE: <span id="score">0</span>
+  <div class="hudBox">
+    ⚡ SCORE:
+    <span id="score">0</span>
   </div>
 
-  <div class="box">
-    ⏱️ <span id="timer">30</span>s
+  <div class="hudBox">
+    ⏱️
+    <span id="timer">30</span>s
   </div>
 
-  <div class="box">
-    💎 <span id="energy">100</span>
+  <div class="hudBox">
+    💎
+    <span id="energy">100</span>
   </div>
 
+</div>
+
+<div id="energyBar">
+  <div id="energyFill"></div>
 </div>
 
 <div id="danger"></div>
 
 
-<!-- START -->
+<!-- START SCREEN -->
 
-<div id="start">
+<div id="startScreen" class="panelScreen">
 
   <div class="panel">
 
@@ -204,15 +380,27 @@ button:active{
 
     <h2>CORE BREAKER</h2>
 
-    <p class="sub">
-      ENTER THE ABANDONED AI LABORATORY.<br><br>
-      DESTROY THE ENEMY DRONES.<br>
-      COLLECT ENERGY.<br>
-      SURVIVE FOR 30 SECONDS.
+    <p class="info">
+
+      🤖 ENTER THE ABANDONED AI LAB<br><br>
+
+      👾 DESTROY ENEMY DRONES<br>
+
+      💎 COLLECT ENERGY<br>
+
+      ⚡ SURVIVE 30 SECONDS<br><br>
+
+      <b>MISSION:</b><br>
+      DESTROY THE CORE
+
     </p>
 
-    <button id="startBtn">
+    <button
+      id="startBtn"
+      class="gameButton">
+
       START MISSION
+
     </button>
 
   </div>
@@ -222,22 +410,29 @@ button:active{
 
 <!-- GAME OVER -->
 
-<div id="gameover" style="display:none">
+<div
+  id="gameover"
+  class="panelScreen hidden">
 
   <div class="panel">
 
     <h1>MISSION FAILED</h1>
 
-    <p class="sub">
-      YOUR CORE ENERGY HAS BEEN DESTROYED.
+    <p class="info">
+      YOUR ROBOT CORE WAS DESTROYED.
     </p>
 
     <h2>
-      SCORE: <span id="finalScore">0</span>
+      SCORE:
+      <span id="finalScore">0</span>
     </h2>
 
-    <button id="restartBtn">
+    <button
+      id="restartBtn"
+      class="gameButton">
+
       PLAY AGAIN
+
     </button>
 
   </div>
@@ -247,23 +442,30 @@ button:active{
 
 <!-- WIN -->
 
-<div id="win" style="display:none">
+<div
+  id="win"
+  class="panelScreen hidden">
 
   <div class="panel">
 
     <h1>CORE DESTROYED!</h1>
 
-    <p class="sub">
-      MISSION COMPLETE.<br>
-      THE AI LABORATORY IS SECURE.
+    <p class="info">
+      MISSION COMPLETE.<br><br>
+      AI LABORATORY SECURED.
     </p>
 
     <h2>
-      SCORE: <span id="winScore">0</span>
+      SCORE:
+      <span id="winScore">0</span>
     </h2>
 
-    <button id="winBtn">
+    <button
+      id="winBtn"
+      class="gameButton">
+
       PLAY AGAIN
+
     </button>
 
   </div>
@@ -271,19 +473,32 @@ button:active{
 </div>
 
 
-<!-- CONTROLS -->
+<!-- AD PLACEHOLDER -->
+
+<div id="adBox">
+  AD SPACE • READY FOR ADMOB
+</div>
+
+
+<!-- MOBILE CONTROLS -->
 
 <div id="controls">
 
-  <button class="ctrl" id="left">
+  <button
+    class="ctrl"
+    id="leftBtn">
     ◀
   </button>
 
-  <button class="ctrl" id="fire">
+  <button
+    class="ctrl"
+    id="fire">
     ⚡
   </button>
 
-  <button class="ctrl" id="right">
+  <button
+    class="ctrl"
+    id="rightBtn">
     ▶
   </button>
 
@@ -299,10 +514,10 @@ button:active{
 ===================================================== */
 
 const canvas =
-  document.getElementById("canvas");
+document.getElementById("canvas");
 
 const ctx =
-  canvas.getContext("2d");
+canvas.getContext("2d");
 
 let W = 0;
 let H = 0;
@@ -310,17 +525,29 @@ let H = 0;
 function resize(){
 
   const dpr =
-    Math.min(window.devicePixelRatio || 1,2);
+  Math.min(
+    window.devicePixelRatio || 1,
+    2
+  );
 
   W = window.innerWidth;
   H = window.innerHeight;
 
-  canvas.width = W*dpr;
-  canvas.height = H*dpr;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
 
   ctx.setTransform(
-    dpr,0,0,dpr,0,0
+    dpr,
+    0,
+    0,
+    dpr,
+    0,
+    0
   );
+
+  if(robot){
+    robot.y = H - 135;
+  }
 }
 
 window.addEventListener(
@@ -328,34 +555,43 @@ window.addEventListener(
   resize
 );
 
-resize();
-
 
 /* =====================================================
-   8-BIT SOUND ENGINE
+   SOUND ENGINE
 ===================================================== */
 
 let audioCtx = null;
+
+let musicTimer = null;
 
 function initSound(){
 
   if(!audioCtx){
 
     audioCtx =
-      new (
-        window.AudioContext ||
-        window.webkitAudioContext
-      )();
+    new (
+      window.AudioContext ||
+      window.webkitAudioContext
+    )();
+
   }
 
-  if(audioCtx.state === "suspended"){
+  if(
+    audioCtx &&
+    audioCtx.state === "suspended"
+  ){
+
     audioCtx.resume();
+
   }
+
 }
 
 
-function beep(
-  frequency,
+/* BASIC SOUND */
+
+function tone(
+  freq,
   duration,
   type="square",
   volume=.06
@@ -364,15 +600,15 @@ function beep(
   if(!audioCtx) return;
 
   const osc =
-    audioCtx.createOscillator();
+  audioCtx.createOscillator();
 
   const gain =
-    audioCtx.createGain();
+  audioCtx.createGain();
 
   osc.type = type;
 
   osc.frequency.setValueAtTime(
-    frequency,
+    freq,
     audioCtx.currentTime
   );
 
@@ -387,43 +623,48 @@ function beep(
   );
 
   osc.connect(gain);
-  gain.connect(audioCtx.destination);
+
+  gain.connect(
+    audioCtx.destination
+  );
 
   osc.start();
 
   osc.stop(
     audioCtx.currentTime + duration
   );
+
 }
 
 
-/* START 8-BIT */
+/* START SOUND */
 
 function startSound(){
 
   initSound();
 
-  beep(110,.12,"square",.08);
+  tone(110,.12,"square",.08);
 
   setTimeout(
-    ()=>beep(165,.12,"square",.07),
+    ()=>tone(165,.12,"square",.07),
     100
   );
 
   setTimeout(
-    ()=>beep(220,.12,"square",.07),
+    ()=>tone(220,.12,"square",.07),
     200
   );
 
   setTimeout(
-    ()=>beep(330,.20,"square",.09),
+    ()=>tone(330,.18,"square",.08),
     300
   );
 
   setTimeout(
-    ()=>beep(660,.35,"sawtooth",.06),
+    ()=>tone(660,.30,"sawtooth",.06),
     430
   );
+
 }
 
 
@@ -433,42 +674,59 @@ function laserSound(){
 
   initSound();
 
-  beep(
-    1000,
+  tone(
+    1050,
     .045,
     "square",
     .07
   );
 
   setTimeout(
-    ()=>beep(400,.07,"square",.035),
+    ()=>tone(
+      420,
+      .07,
+      "square",
+      .035
+    ),
     25
   );
+
 }
 
 
-/* BIG EXPLOSION */
+/* EXPLOSION */
 
 function explosionSound(){
 
   initSound();
 
-  beep(
+  tone(
     90,
-    .30,
+    .28,
     "sawtooth",
     .12
   );
 
   setTimeout(
-    ()=>beep(55,.30,"square",.10),
-    70
+    ()=>tone(
+      55,
+      .28,
+      "square",
+      .10
+    ),
+    60
   );
 
   setTimeout(
-    ()=>beep(180,.12,"sawtooth",.05),
-    150
+    ()=>tone(
+      180,
+      .12,
+      "sawtooth",
+      .05
+    ),
+    140
   );
+
 }
 
 
@@ -478,7 +736,7 @@ function energySound(){
 
   initSound();
 
-  beep(
+  tone(
     500,
     .08,
     "square",
@@ -486,9 +744,15 @@ function energySound(){
   );
 
   setTimeout(
-    ()=>beep(800,.12,"square",.06),
+    ()=>tone(
+      800,
+      .12,
+      "square",
+      .06
+    ),
     80
   );
+
 }
 
 
@@ -498,12 +762,13 @@ function hitSound(){
 
   initSound();
 
-  beep(
+  tone(
     120,
-    .12,
+    .10,
     "square",
     .07
   );
+
 }
 
 
@@ -513,12 +778,13 @@ function countdownSound(){
 
   initSound();
 
-  beep(
+  tone(
     700,
     .08,
     "square",
     .07
   );
+
 }
 
 
@@ -528,22 +794,23 @@ function winSound(){
 
   initSound();
 
-  beep(330,.12,"square",.07);
+  tone(330,.12,"square",.07);
 
   setTimeout(
-    ()=>beep(440,.12,"square",.07),
+    ()=>tone(440,.12,"square",.07),
     120
   );
 
   setTimeout(
-    ()=>beep(660,.18,"square",.08),
+    ()=>tone(660,.16,"square",.08),
     240
   );
 
   setTimeout(
-    ()=>beep(880,.35,"square",.08),
+    ()=>tone(880,.35,"square",.08),
     400
   );
+
 }
 
 
@@ -553,17 +820,33 @@ function gameOverSound(){
 
   initSound();
 
-  beep(330,.15,"sawtooth",.07);
+  tone(
+    330,
+    .15,
+    "sawtooth",
+    .07
+  );
 
   setTimeout(
-    ()=>beep(220,.18,"sawtooth",.07),
+    ()=>tone(
+      220,
+      .18,
+      "sawtooth",
+      .07
+    ),
     180
   );
 
   setTimeout(
-    ()=>beep(110,.35,"square",.08),
+    ()=>tone(
+      110,
+      .35,
+      "square",
+      .08
+    ),
     400
   );
+
 }
 
 
@@ -585,6 +868,8 @@ let enemyTimer = 0;
 
 let crystalTimer = 0;
 
+let shootCooldown = 0;
+
 let enemies = [];
 
 let shots = [];
@@ -592,6 +877,8 @@ let shots = [];
 let crystals = [];
 
 let particles = [];
+
+let stars = [];
 
 let leftPressed = false;
 
@@ -604,14 +891,86 @@ let rightPressed = false;
 
 const robot = {
 
-  x: W/2,
+  x:0,
 
-  y: H-130,
+  y:0,
 
-  size:30,
+  size:32,
 
   speed:7
+
 };
+
+
+/* =====================================================
+   INITIALIZE
+===================================================== */
+
+resize();
+
+robot.x = W / 2;
+
+robot.y = H - 135;
+
+
+/* STARS */
+
+for(
+  let i=0;
+  i<80;
+  i++
+){
+
+  stars.push({
+
+    x:Math.random()*W,
+
+    y:Math.random()*H,
+
+    size:Math.random()*2+1,
+
+    speed:Math.random()*1.5+.3
+
+  });
+
+}
+
+
+/* =====================================================
+   HUD
+===================================================== */
+
+function updateHUD(){
+
+  document.getElementById(
+    "score"
+  ).textContent = score;
+
+  document.getElementById(
+    "timer"
+  ).textContent =
+  Math.max(
+    0,
+    Math.ceil(timeLeft)
+  );
+
+  document.getElementById(
+    "energy"
+  ).textContent =
+  Math.max(
+    0,
+    Math.floor(energy)
+  );
+
+  document.getElementById(
+    "energyFill"
+  ).style.width =
+  Math.max(
+    0,
+    energy
+  ) + "%";
+
+}
 
 
 /* =====================================================
@@ -636,6 +995,8 @@ function startGame(){
 
   crystalTimer = 0;
 
+  shootCooldown = 0;
+
   enemies = [];
 
   shots = [];
@@ -644,32 +1005,35 @@ function startGame(){
 
   particles = [];
 
-  robot.x = W/2;
+  robot.x = W / 2;
 
-  robot.y = H-130;
+  robot.y = H - 135;
 
-  document.getElementById(
-    "start"
-  ).style.display = "none";
+  document
+  .getElementById("startScreen")
+  .classList.add("hidden");
 
-  document.getElementById(
-    "gameover"
-  ).style.display = "none";
+  document
+  .getElementById("gameover")
+  .classList.add("hidden");
 
-  document.getElementById(
-    "win"
-  ).style.display = "none";
+  document
+  .getElementById("win")
+  .classList.add("hidden");
 
-  document.getElementById(
-    "danger"
-  ).classList.remove("danger");
+  document
+  .getElementById("danger")
+  .classList.remove("danger");
 
   updateHUD();
 
   lastTime =
-    performance.now();
+  performance.now();
 
-  requestAnimationFrame(gameLoop);
+  requestAnimationFrame(
+    gameLoop
+  );
+
 }
 
 
@@ -689,9 +1053,10 @@ function gameOver(){
     "finalScore"
   ).textContent = score;
 
-  document.getElementById(
-    "gameover"
-  ).style.display = "flex";
+  document
+  .getElementById("gameover")
+  .classList.remove("hidden");
+
 }
 
 
@@ -711,9 +1076,10 @@ function winGame(){
     "winScore"
   ).textContent = score;
 
-  document.getElementById(
-    "win"
-  ).style.display = "flex";
+  document
+  .getElementById("win")
+  .classList.remove("hidden");
+
 }
 
 
@@ -725,70 +1091,87 @@ function shoot(){
 
   if(!running) return;
 
+  if(shootCooldown > 0) return;
+
+  shootCooldown = .16;
+
   laserSound();
 
   shots.push({
 
     x:robot.x,
 
-    y:robot.y-30,
+    y:robot.y-28,
 
-    vy:-11
+    vy:-12,
+
+    size:4
+
   });
+
 }
 
 
 /* =====================================================
-   ENEMY
+   SPAWN ENEMY
 ===================================================== */
 
 function spawnEnemy(){
 
   enemies.push({
 
-    x:
-      25 +
-      Math.random() *
-      Math.max(10,W-50),
+    x:25 + Math.random() *
+    Math.max(
+      20,
+      W - 50
+    ),
 
-    y:-40,
+    y:-35,
 
     size:
-      25 +
-      Math.random()*15,
+    25 + Math.random()*12,
 
     vy:
-      2 +
-      Math.random()*2 +
-      score*.002
+    1.7 + Math.random()*1.8,
+
+    hp:1,
+
+    angle:0
+
   });
+
 }
 
 
 /* =====================================================
-   CRYSTAL
+   SPAWN CRYSTAL
 ===================================================== */
 
 function spawnCrystal(){
 
   crystals.push({
 
-    x:
-      25 +
-      Math.random() *
-      Math.max(10,W-50),
+    x:25 + Math.random() *
+    Math.max(
+      20,
+      W - 50
+    ),
 
     y:-20,
 
-    size:14,
+    size:10,
 
-    vy:2
+    vy:1.4,
+
+    angle:0
+
   });
+
 }
 
 
 /* =====================================================
-   EXPLOSION PARTICLES
+   EXPLOSION
 ===================================================== */
 
 function explode(x,y){
@@ -797,7 +1180,7 @@ function explode(x,y){
 
   for(
     let i=0;
-    i<22;
+    i<18;
     i++
   ){
 
@@ -808,14 +1191,20 @@ function explode(x,y){
       y:y,
 
       vx:
-        (Math.random()-.5)*8,
+      (Math.random()-.5)*7,
 
       vy:
-        (Math.random()-.5)*8,
+      (Math.random()-.5)*7,
 
-      life:1
+      life:1,
+
+      size:
+      Math.random()*4+2
+
     });
+
   }
+
 }
 
 
@@ -825,56 +1214,68 @@ function explode(x,y){
 
 function update(dt){
 
+  const delta =
+  dt / 1000;
+
+  timeLeft -= delta;
+
+  shootCooldown -= delta;
+
+  enemyTimer -= delta;
+
+  crystalTimer -= delta;
+
+
   /* ROBOT */
 
   if(leftPressed){
-    robot.x -= robot.speed;
+
+    robot.x -=
+    robot.speed;
+
   }
 
   if(rightPressed){
-    robot.x += robot.speed;
+
+    robot.x +=
+    robot.speed;
+
   }
 
   robot.x =
+  Math.max(
+    22,
+    Math.min(
+      W-22,
+      robot.x
+    )
+  );
+
+
+  /* SPAWN */
+
+  if(enemyTimer <= 0){
+
+    spawnEnemy();
+
+    enemyTimer =
     Math.max(
-      25,
-      Math.min(
-        W-25,
-        robot.x
-      )
+      .30,
+      .85 - (
+        30-timeLeft
+      )*.012
     );
 
-
-  /* TIMER */
-
-  timeLeft -= dt/1000;
-
-  if(
-    timeLeft <= 5 &&
-    timeLeft > 0
-  ){
-
-    document
-      .getElementById("danger")
-      .classList.add("danger");
-
-  }else{
-
-    document
-      .getElementById("danger")
-      .classList.remove("danger");
   }
 
 
-  if(timeLeft <= 0){
+  if(crystalTimer <= 0){
 
-    timeLeft = 0;
+    spawnCrystal();
 
-    updateHUD();
+    crystalTimer =
+    2.4 + Math.random()*2;
 
-    winGame();
-
-    return;
   }
 
 
@@ -886,44 +1287,65 @@ function update(dt){
     i--
   ){
 
-    const s = shots[i];
+    const s =
+    shots[i];
 
-    s.y += s.vy;
+    s.y +=
+    s.vy;
 
-    if(s.y < -30){
+    if(s.y < -20){
 
       shots.splice(i,1);
+
+      continue;
+
     }
-  }
 
 
-  /* ENEMY SPAWN */
+    /* HIT ENEMY */
 
-  enemyTimer += dt;
+    for(
+      let j=enemies.length-1;
+      j>=0;
+      j--
+    ){
 
-  if(
-    enemyTimer >
-    Math.max(
-      250,
-      850-score*2
-    )
-  ){
+      const e =
+      enemies[j];
 
-    spawnEnemy();
+      const dx =
+      s.x-e.x;
 
-    enemyTimer = 0;
-  }
+      const dy =
+      s.y-e.y;
 
+      const dist =
+      Math.sqrt(
+        dx*dx + dy*dy
+      );
 
-  /* CRYSTALS */
+      if(
+        dist <
+        e.size/2 + 8
+      ){
 
-  crystalTimer += dt;
+        explode(
+          e.x,
+          e.y
+        );
 
-  if(crystalTimer > 2200){
+        enemies.splice(j,1);
 
-    spawnCrystal();
+        shots.splice(i,1);
 
-    crystalTimer = 0;
+        score += 10;
+
+        break;
+
+      }
+
+    }
+
   }
 
 
@@ -935,19 +1357,31 @@ function update(dt){
     i--
   ){
 
-    const e = enemies[i];
+    const e =
+    enemies[i];
 
-    e.y += e.vy;
+    e.y +=
+    e.vy;
+
+    e.angle += .05;
 
 
-    /* ROBOT COLLISION */
+    /* HIT ROBOT */
+
+    const dx =
+    e.x-robot.x;
+
+    const dy =
+    e.y-robot.y;
+
+    const dist =
+    Math.sqrt(
+      dx*dx+dy*dy
+    );
 
     if(
-      Math.abs(e.x-robot.x)
-      < e.size+10
-      &&
-      Math.abs(e.y-robot.y)
-      < e.size+15
+      dist <
+      e.size/2 + robot.size/2
     ){
 
       energy -= 15;
@@ -961,74 +1395,50 @@ function update(dt){
 
       enemies.splice(i,1);
 
-      if(energy<=0){
+      if(energy <= 25){
 
-        energy=0;
+        document
+        .getElementById("danger")
+        .classList.add("danger");
+
+      }
+
+      if(energy <= 0){
+
+        energy = 0;
 
         updateHUD();
 
         gameOver();
 
         return;
+
       }
 
-      continue;
     }
 
 
-    if(e.y > H+60){
+    /* MISS */
 
-      enemies.splice(i,1);
-    }
-  }
-
-
-  /* SHOT COLLISION */
-
-  for(
-    let i=shots.length-1;
-    i>=0;
-    i--
-  ){
-
-    const s = shots[i];
-
-    let destroyed = false;
-
-    for(
-      let j=enemies.length-1;
-      j>=0;
-      j--
+    else if(
+      e.y >
+      H + 50
     ){
 
-      const e = enemies[j];
+      energy -= 4;
 
-      if(
-        Math.abs(s.x-e.x)
-        < e.size
-        &&
-        Math.abs(s.y-e.y)
-        < e.size
-      ){
+      enemies.splice(i,1);
 
-        score += 10;
+      if(energy <= 25){
 
-        explode(
-          e.x,
-          e.y
-        );
+        document
+        .getElementById("danger")
+        .classList.add("danger");
 
-        shots.splice(i,1);
-
-        enemies.splice(j,1);
-
-        destroyed = true;
-
-        break;
       }
+
     }
 
-    if(destroyed) continue;
   }
 
 
@@ -1040,33 +1450,55 @@ function update(dt){
     i--
   ){
 
-    const c = crystals[i];
+    const c =
+    crystals[i];
 
     c.y += c.vy;
 
+    c.angle += .08;
+
+    const dx =
+    c.x-robot.x;
+
+    const dy =
+    c.y-robot.y;
+
+    const dist =
+    Math.sqrt(
+      dx*dx+dy*dy
+    );
+
     if(
-      Math.abs(c.x-robot.x)<32
-      &&
-      Math.abs(c.y-robot.y)<32
+      dist <
+      c.size + robot.size/2
     ){
 
       energy =
-        Math.min(
-          100,
-          energy+20
-        );
+      Math.min(
+        100,
+        energy + 12
+      );
+
+      score += 5;
 
       energySound();
 
       crystals.splice(i,1);
 
-      continue;
+      document
+      .getElementById("danger")
+      .classList.remove("danger");
+
     }
 
-    if(c.y > H+30){
+    else if(
+      c.y > H+30
+    ){
 
       crystals.splice(i,1);
+
     }
+
   }
 
 
@@ -1078,33 +1510,76 @@ function update(dt){
     i--
   ){
 
-    const p = particles[i];
+    const p =
+    particles[i];
 
     p.x += p.vx;
 
     p.y += p.vy;
 
-    p.life -= .035;
+    p.vy += .08;
 
-    if(p.life<=0){
+    p.life -=
+    delta*1.8;
+
+    if(p.life <= 0){
 
       particles.splice(i,1);
+
     }
+
+  }
+
+
+  /* STARS */
+
+  for(
+    const s of stars
+  ){
+
+    s.y +=
+    s.speed;
+
+    if(s.y > H){
+
+      s.y = -5;
+
+      s.x =
+      Math.random()*W;
+
+    }
+
+  }
+
+
+  /* WIN */
+
+  if(timeLeft <= 0){
+
+    timeLeft = 0;
+
+    updateHUD();
+
+    winGame();
+
+    return;
+
   }
 
 
   updateHUD();
+
 }
 
 
 /* =====================================================
-   BACKGROUND
+   DRAW BACKGROUND
 ===================================================== */
 
 function drawBackground(){
 
   ctx.fillStyle =
-    "#020711";
+  "#020711";
 
   ctx.fillRect(
     0,
@@ -1114,14 +1589,33 @@ function drawBackground(){
   );
 
 
-  /* GRID */
+  /* STARS */
+
+  for(
+    const s of stars
+  ){
+
+    ctx.fillStyle =
+    "rgba(100,220,255,.7)";
+
+    ctx.fillRect(
+      s.x,
+      s.y,
+      s.size,
+      s.size
+    );
+
+  }
+
+
+  /* LAB GRID */
 
   ctx.strokeStyle =
-    "rgba(30,200,255,.10)";
+  "rgba(0,180,255,.08)";
 
-  ctx.lineWidth = 1;
+  ctx.lineWidth=1;
 
-  const grid = 40;
+  const grid=50;
 
   for(
     let x=0;
@@ -1136,10 +1630,11 @@ function drawBackground(){
     ctx.lineTo(x,H);
 
     ctx.stroke();
+
   }
 
   for(
-    let y=0;
+    let y=60;
     y<H;
     y+=grid
   ){
@@ -1151,114 +1646,124 @@ function drawBackground(){
     ctx.lineTo(W,y);
 
     ctx.stroke();
+
   }
 
-
-  /* MOVING LASER LINES */
-
-  for(
-    let i=0;
-    i<6;
-    i++
-  ){
-
-    const y =
-      (
-        performance.now()/12
-        +
-        i*130
-      ) % H;
-
-    ctx.strokeStyle =
-      "rgba(0,220,255,.07)";
-
-    ctx.beginPath();
-
-    ctx.moveTo(0,y);
-
-    ctx.lineTo(W,y);
-
-    ctx.stroke();
-  }
 }
 
 
 /* =====================================================
-   ROBOT
+   DRAW ROBOT
 ===================================================== */
 
 function drawRobot(){
 
+  const x =
+  robot.x;
+
+  const y =
+  robot.y;
+
   ctx.save();
 
   ctx.translate(
-    robot.x,
-    robot.y
+    x,
+    y
   );
 
-  ctx.shadowBlur = 20;
 
-  ctx.shadowColor =
-    "#00eaff";
+  /* GLOW */
+
+  ctx.shadowBlur=18;
+
+  ctx.shadowColor=
+  "#00eaff";
 
 
   /* BODY */
 
   ctx.fillStyle =
-    "#12bfe8";
+  "#163a55";
 
   ctx.fillRect(
     -18,
-    -14,
+    -12,
     36,
-    31
+    35
+  );
+
+
+  ctx.strokeStyle =
+  "#28eaff";
+
+  ctx.lineWidth=2;
+
+  ctx.strokeRect(
+    -18,
+    -12,
+    36,
+    35
   );
 
 
   /* HEAD */
 
   ctx.fillStyle =
-    "#d9fbff";
+  "#315a73";
 
   ctx.fillRect(
-    -16,
-    -35,
-    32,
-    21
+    -15,
+    -32,
+    30,
+    20
+  );
+
+
+  ctx.strokeStyle =
+  "#55f1ff";
+
+  ctx.strokeRect(
+    -15,
+    -32,
+    30,
+    20
   );
 
 
   /* EYES */
 
   ctx.fillStyle =
-    "#ff3048";
+  "#ff3355";
 
   ctx.fillRect(
-    -10,
-    -28,
-    6,
-    6
+    -9,
+    -25,
+    5,
+    5
   );
 
   ctx.fillRect(
     4,
-    -28,
-    6,
-    6
+    -25,
+    5,
+    5
   );
 
 
   /* CORE */
 
   ctx.fillStyle =
-    "#ffffff";
+  "#00ffcc";
+
+  ctx.shadowColor =
+  "#00ffcc";
 
   ctx.beginPath();
 
   ctx.arc(
     0,
-    2,
-    7,
+    5,
+    6,
     0,
     Math.PI*2
   );
@@ -1266,32 +1771,46 @@ function drawRobot(){
   ctx.fill();
 
 
+  /* GUN */
+
+  ctx.fillStyle =
+  "#778b99";
+
+  ctx.fillRect(
+    -4,
+    -43,
+    8,
+    12
+  );
+
+
   /* LEGS */
 
   ctx.fillStyle =
-    "#087f9f";
+  "#24485f";
 
   ctx.fillRect(
-    -15,
-    17,
-    10,
-    13
+    -13,
+    23,
+    9,
+    15
   );
 
   ctx.fillRect(
-    5,
-    17,
-    10,
-    13
+    4,
+    23,
+    9,
+    15
   );
 
 
   ctx.restore();
+
 }
 
 
 /* =====================================================
-   ENEMY
+   DRAW ENEMY
 ===================================================== */
 
 function drawEnemy(e){
@@ -1303,166 +1822,184 @@ function drawEnemy(e){
     e.y
   );
 
-  ctx.shadowBlur = 18;
+  ctx.rotate(
+    e.angle
+  );
 
-  ctx.shadowColor =
-    "#ff1538";
+  ctx.shadowBlur=15;
+
+  ctx.shadowColor=
+  "#ff2048";
 
 
   ctx.fillStyle =
-    "#a30d28";
+  "#7b1426";
 
   ctx.beginPath();
 
-  ctx.arc(
+  ctx.moveTo(
     0,
-    0,
-    e.size,
-    0,
-    Math.PI*2
+    -e.size/2
   );
+
+  ctx.lineTo(
+    e.size/2,
+    0
+  );
+
+  ctx.lineTo(
+    0,
+    e.size/2
+  );
+
+  ctx.lineTo(
+    -e.size/2,
+    0
+  );
+
+  ctx.closePath();
 
   ctx.fill();
 
 
-  ctx.fillStyle =
-    "#ff5065";
+  ctx.strokeStyle =
+  "#ff5369";
 
-  ctx.beginPath();
+  ctx.lineWidth=2;
 
-  ctx.arc(
-    0,
-    0,
-    e.size*.35,
-    0,
-    Math.PI*2
-  );
-
-  ctx.fill();
+  ctx.stroke();
 
 
   ctx.fillStyle =
-    "#05070c";
+  "#ffec00";
 
-  ctx.beginPath();
-
-  ctx.arc(
-    0,
-    0,
-    e.size*.14,
-    0,
-    Math.PI*2
+  ctx.fillRect(
+    -4,
+    -4,
+    8,
+    8
   );
-
-  ctx.fill();
 
 
   ctx.restore();
+
 }
 
 
 /* =====================================================
-   SHOTS
+   DRAW CRYSTAL
 ===================================================== */
 
-function drawShots(){
+function drawCrystal(c){
 
   ctx.save();
 
-  ctx.shadowBlur = 18;
+  ctx.translate(
+    c.x,
+    c.y
+  );
 
-  ctx.shadowColor =
-    "#00ffff";
+  ctx.rotate(
+    c.angle
+  );
+
+  ctx.shadowBlur=18;
+
+  ctx.shadowColor=
+  "#00ffae";
 
   ctx.fillStyle =
-    "#7fffff";
+  "#00d994";
 
-  for(const s of shots){
+  ctx.beginPath();
 
-    ctx.fillRect(
-      s.x-3,
-      s.y-13,
-      6,
-      22
-    );
-  }
+  ctx.moveTo(
+    0,
+    -c.size
+  );
+
+  ctx.lineTo(
+    c.size,
+    0
+  );
+
+  ctx.lineTo(
+    0,
+    c.size
+  );
+
+  ctx.lineTo(
+    -c.size,
+    0
+  );
+
+  ctx.closePath();
+
+  ctx.fill();
 
   ctx.restore();
+
 }
 
 
 /* =====================================================
-   CRYSTALS
+   DRAW SHOTS
 ===================================================== */
 
-function drawCrystals(){
+function drawShot(s){
 
   ctx.save();
 
-  ctx.shadowBlur = 20;
+  ctx.shadowBlur=15;
 
-  ctx.shadowColor =
-    "#00ffb7";
+  ctx.shadowColor=
+  "#00ffff";
 
   ctx.fillStyle =
-    "#16ffc0";
+  "#ffffff";
 
-  for(const c of crystals){
-
-    ctx.beginPath();
-
-    ctx.moveTo(
-      c.x,
-      c.y-c.size
-    );
-
-    ctx.lineTo(
-      c.x+c.size,
-      c.y
-    );
-
-    ctx.lineTo(
-      c.x,
-      c.y+c.size
-    );
-
-    ctx.lineTo(
-      c.x-c.size,
-      c.y
-    );
-
-    ctx.closePath();
-
-    ctx.fill();
-  }
+  ctx.fillRect(
+    s.x-2,
+    s.y-10,
+    4,
+    14
+  );
 
   ctx.restore();
+
 }
 
 
 /* =====================================================
-   PARTICLES
+   DRAW PARTICLES
 ===================================================== */
 
 function drawParticles(){
 
-  for(const p of particles){
+  for(
+    const p of particles
+  ){
 
     ctx.globalAlpha =
-      Math.max(0,p.life);
+    Math.max(
+      0,
+      p.life
+    );
 
     ctx.fillStyle =
-      "#ff4050";
+    "#ffcc33";
 
     ctx.fillRect(
       p.x,
       p.y,
-      4,
-      4
+      p.size,
+      p.size
     );
+
   }
 
   ctx.globalAlpha=1;
+
 }
 
 
@@ -1474,40 +2011,34 @@ function draw(){
 
   drawBackground();
 
-  drawCrystals();
+  for(
+    const c of crystals
+  ){
 
-  drawShots();
+    drawCrystal(c);
+
+  }
 
   for(
     const e of enemies
   ){
+
     drawEnemy(e);
+
   }
+
+  for(
+    const s of shots
+  ){
+
+    drawShot(s);
+
+  }
+
+  drawParticles();
 
   drawRobot();
 
-  drawParticles();
-}
-
-
-/* =====================================================
-   HUD
-===================================================== */
-
-function updateHUD(){
-
-  document.getElementById(
-    "score"
-  ).textContent = score;
-
-  document.getElementById(
-    "energy"
-  ).textContent = energy;
-
-  document.getElementById(
-    "timer"
-  ).textContent =
-    Math.ceil(timeLeft);
 }
 
 
@@ -1520,10 +2051,10 @@ function gameLoop(time){
   if(!running) return;
 
   const dt =
-    Math.min(
-      50,
-      time-lastTime
-    );
+  Math.min(
+    50,
+    time-lastTime
+  );
 
   lastTime = time;
 
@@ -1536,119 +2067,161 @@ function gameLoop(time){
     requestAnimationFrame(
       gameLoop
     );
+
   }
+
 }
 
 
 /* =====================================================
-   BUTTONS
+   KEYBOARD
 ===================================================== */
 
-document.getElementById(
-  "startBtn"
-).addEventListener(
-  "click",
-  startGame
+window.addEventListener(
+  "keydown",
+  function(e){
+
+    if(
+      e.key === "ArrowLeft"
+    ){
+
+      leftPressed=true;
+
+    }
+
+    if(
+      e.key === "ArrowRight"
+    ){
+
+      rightPressed=true;
+
+    }
+
+    if(
+      e.code === "Space"
+    ){
+
+      shoot();
+
+    }
+
+  }
 );
 
-document.getElementById(
-  "restartBtn"
-).addEventListener(
-  "click",
-  startGame
-);
 
-document.getElementById(
-  "winBtn"
-).addEventListener(
-  "click",
-  startGame
+window.addEventListener(
+  "keyup",
+  function(e){
+
+    if(
+      e.key === "ArrowLeft"
+    ){
+
+      leftPressed=false;
+
+    }
+
+    if(
+      e.key === "ArrowRight"
+    ){
+
+      rightPressed=false;
+
+    }
+
+  }
 );
 
 
 /* =====================================================
-   MOBILE CONTROLS
+   MOBILE BUTTONS
 ===================================================== */
 
-const leftBtn =
-  document.getElementById("left");
+function holdButton(
+  element,
+  onStart,
+  onEnd
+){
 
-const rightBtn =
-  document.getElementById("right");
+  element.addEventListener(
+    "touchstart",
+    function(e){
 
-const fireBtn =
-  document.getElementById("fire");
+      e.preventDefault();
 
+      onStart();
 
-function leftDown(e){
+    },
+    {passive:false}
+  );
 
-  e.preventDefault();
+  element.addEventListener(
+    "touchend",
+    function(e){
 
-  leftPressed=true;
+      e.preventDefault();
+
+      onEnd();
+
+    },
+    {passive:false}
+  );
+
+  element.addEventListener(
+    "touchcancel",
+    function(){
+
+      onEnd();
+
+    }
+  );
+
 }
 
-function leftUp(e){
 
-  e.preventDefault();
+/* LEFT */
 
-  leftPressed=false;
-}
+holdButton(
 
+  document.getElementById(
+    "leftBtn"
+  ),
 
-function rightDown(e){
+  ()=>{
+    leftPressed=true;
+  },
 
-  e.preventDefault();
+  ()=>{
+    leftPressed=false;
+  }
 
-  rightPressed=true;
-}
-
-function rightUp(e){
-
-  e.preventDefault();
-
-  rightPressed=false;
-}
-
-
-leftBtn.addEventListener(
-  "touchstart",
-  leftDown,
-  {passive:false}
-);
-
-leftBtn.addEventListener(
-  "touchend",
-  leftUp,
-  {passive:false}
-);
-
-leftBtn.addEventListener(
-  "touchcancel",
-  leftUp,
-  {passive:false}
 );
 
 
-rightBtn.addEventListener(
-  "touchstart",
-  rightDown,
-  {passive:false}
+/* RIGHT */
+
+holdButton(
+
+  document.getElementById(
+    "rightBtn"
+  ),
+
+  ()=>{
+    rightPressed=true;
+  },
+
+  ()=>{
+    rightPressed=false;
+  }
+
 );
 
-rightBtn.addEventListener(
-  "touchend",
-  rightUp,
-  {passive:false}
-);
 
-rightBtn.addEventListener(
-  "touchcancel",
-  rightUp,
-  {passive:false}
-);
+/* FIRE */
 
-
-fireBtn.addEventListener(
+document
+.getElementById("fire")
+.addEventListener(
   "touchstart",
   function(e){
 
@@ -1661,74 +2234,51 @@ fireBtn.addEventListener(
 );
 
 
-/* MOUSE */
+/* ALSO CLICK FOR TESTING */
 
-leftBtn.addEventListener(
-  "mousedown",
-  ()=>leftPressed=true
-);
-
-leftBtn.addEventListener(
-  "mouseup",
-  ()=>leftPressed=false
-);
-
-rightBtn.addEventListener(
-  "mousedown",
-  ()=>rightPressed=true
-);
-
-rightBtn.addEventListener(
-  "mouseup",
-  ()=>rightPressed=false
-);
-
-fireBtn.addEventListener(
-  "mousedown",
+document
+.getElementById("fire")
+.addEventListener(
+  "click",
   shoot
 );
 
 
-/* KEYBOARD */
+/* =====================================================
+   GAME BUTTONS
+===================================================== */
 
-window.addEventListener(
-  "keydown",
-  function(e){
-
-    if(e.key==="ArrowLeft")
-      leftPressed=true;
-
-    if(e.key==="ArrowRight")
-      rightPressed=true;
-
-    if(e.code==="Space")
-      shoot();
-  }
+document
+.getElementById("startBtn")
+.addEventListener(
+  "click",
+  startGame
 );
 
 
-window.addEventListener(
-  "keyup",
-  function(e){
-
-    if(e.key==="ArrowLeft")
-      leftPressed=false;
-
-    if(e.key==="ArrowRight")
-      rightPressed=false;
-  }
+document
+.getElementById("restartBtn")
+.addEventListener(
+  "click",
+  startGame
 );
 
 
-/* INITIAL */
+document
+.getElementById("winBtn")
+.addEventListener(
+  "click",
+  startGame
+);
 
-robot.x = W/2;
 
-robot.y = H-130;
+/* =====================================================
+   FIRST DRAW
+===================================================== */
 
 draw();
 
 </script>
 
 </body>
-</html>
+  </html>
