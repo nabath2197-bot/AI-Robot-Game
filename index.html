@@ -143,6 +143,79 @@ button:active{transform:scale(.97)}
 </div>
 
 <script>
+  <script>
+
+// 🎵 AI ROBOT SOUND ENGINE
+let audioCtx=null;
+
+function initSound(){
+  if(!audioCtx){
+    audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+  }
+  if(audioCtx.state==="suspended"){
+    audioCtx.resume();
+  }
+}
+
+function soundTone(freq,duration,type="sine",volume=0.08){
+  if(!audioCtx)return;
+
+  const osc=audioCtx.createOscillator();
+  const gain=audioCtx.createGain();
+
+  osc.type=type;
+  osc.frequency.value=freq;
+
+  gain.gain.setValueAtTime(volume,audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(
+    0.001,
+    audioCtx.currentTime+duration
+  );
+
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.start();
+  osc.stop(audioCtx.currentTime+duration);
+}
+
+function fireSound(){
+  soundTone(720,0.08,"sawtooth",0.06);
+  setTimeout(()=>soundTone(360,0.12,"square",0.04),35);
+}
+
+function startSound(){
+  soundTone(220,0.15,"sine",0.06);
+  setTimeout(()=>soundTone(440,0.18,"triangle",0.06),120);
+  setTimeout(()=>soundTone(660,0.25,"triangle",0.07),240);
+}
+
+  osc.type=type;
+  osc.frequency.value=freq;
+
+  gain.gain.setValueAtTime(volume,audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(
+    0.001,
+    audioCtx.currentTime+duration
+  );
+
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.start();
+  osc.stop(audioCtx.currentTime+duration);
+}
+
+function fireSound(){
+  soundTone(720,0.08,"sawtooth",0.06);
+  setTimeout(()=>soundTone(360,0.12,"square",0.04),35);
+}
+
+function startSound(){
+  soundTone(220,0.15,"sine",0.06);
+  setTimeout(()=>soundTone(440,0.18,"triangle",0.06),120);
+  setTimeout(()=>soundTone(660,0.25,"triangle",0.07),240);
+}
 const canvas=document.getElementById("canvas");
 const ctx=canvas.getContext("2d");
 
@@ -177,21 +250,26 @@ let crystals=[];
 let shots=[];
 
 function startGame(){
+  initSound();
+  startSound();
+
   running=true;
   score=0;
   energy=100;
   level=1;
   speed=2;
+
   robot.y=innerHeight-220;
   enemies=[];
   crystals=[];
   shots=[];
   robot.x=W/2;
+
   document.getElementById("start").style.display="none";
   document.getElementById("gameover").style.display="none";
   updateHUD();
   requestAnimationFrame(loop);
-}
+  }
 
 function updateHUD(){
   document.getElementById("score").textContent=score;
@@ -258,8 +336,9 @@ function crystalDraw(c){
 
 function shoot(){
   if(!running)return;
-
+  fireSound();
   shots.push({
+    
     x:robot.x,
     y:robot.y-30,
     vy:-8
