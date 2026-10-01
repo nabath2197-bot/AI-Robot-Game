@@ -9,5 +9,13 @@
   "background_color": "#02040b",
   "theme_color": "#02040b",
   "description": "MS-MS ROBOT futuristic AI robot action game.",
-  "lang": "en"
+  "lang": "en",
+  "icons": [
+    {
+      "src": "./cyborg.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
