@@ -1,0 +1,66 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'index.html'
+      - '.github/workflows/android.yml'
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout game
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Create Capacitor project
+        run: |
+          mkdir -p www
+          cp index.html www/index.html
+
+          cat > package.json <<'EOF'
+          {
+            "name": "sameer-thapa-ai-robot-game",
+            "version": "1.0.0",
+            "private": true,
+            "scripts": {
+              "build": "echo Build complete"
+            }
+          }
+          EOF
+
+          npm install @capacitor/core @capacitor/cli @capacitor/android
+
+          npx cap init "SAMEER THAPA" "com.sameerthapa.airobotgame" --web-dir www
+
+          npx cap add android
+
+      - name: Build APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: SAMEER-THAPA-AI-ROBOT-GAME-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
