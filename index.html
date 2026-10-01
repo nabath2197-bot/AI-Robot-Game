@@ -346,12 +346,12 @@ function drawRoad(){
 /* AI CAR */
 
 function drawPlayer(){
- alert("DRAW PLAYER RUNNING");
 
   const x=player.x;
-  const y=player.y;55
+  const y=player.y;
 
-  ctx.save();
+ctx.save();
+ctx.translate(0,-180);
 
   ctx.fillStyle="rgba(0,0,0,.8)";
   ctx.fillRect(x-40,y+48,80,18);
