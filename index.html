@@ -12,8 +12,9 @@
   box-sizing:border-box;
   margin:0;
   padding:0;
-  touch-action:none;
   user-select:none;
+  -webkit-user-select:none;
+  touch-action:none;
 }
 
 html,body{
@@ -38,8 +39,8 @@ html,body{
   top:10px;
   left:10px;
   right:10px;
-  z-index:10;
-  color:white;
+  z-index:20;
+  color:#fff;
   pointer-events:none;
 }
 
@@ -51,19 +52,21 @@ html,body{
 }
 
 #info{
-  margin-top:5px;
+  margin-top:6px;
   display:flex;
   justify-content:space-between;
   font-size:13px;
-  font-weight:bold;
+  font-weight:900;
 }
 
 #healthBox{
   margin-top:7px;
-  width:150px;
-  height:9px;
-  border:1px solid white;
+  width:160px;
+  height:10px;
+  border:1px solid #fff;
   background:#222;
+  border-radius:5px;
+  overflow:hidden;
 }
 
 #health{
@@ -72,13 +75,20 @@ html,body{
   background:#e00000;
 }
 
+#target{
+  margin-top:5px;
+  font-size:12px;
+  color:#ff5555;
+  font-weight:bold;
+}
+
 #controls{
   position:fixed;
   left:0;
   right:0;
-  bottom:22px;
-  z-index:20;
-  height:120px;
+  bottom:18px;
+  height:92px;
+  z-index:30;
   pointer-events:none;
 }
 
@@ -86,105 +96,111 @@ html,body{
   position:absolute;
   pointer-events:auto;
   border:2px solid #ff2020;
-  background:rgba(10,10,10,.82);
-  color:white;
+  background:rgba(5,5,5,.90);
+  color:#fff;
   font-weight:900;
   border-radius:16px;
-  box-shadow:0 0 18px rgba(255,0,0,.55);
+  box-shadow:
+    0 0 12px rgba(255,0,0,.7),
+    inset 0 0 12px rgba(255,0,0,.12);
   -webkit-tap-highlight-color:transparent;
 }
 
+.control:active{
+  transform:scale(.94);
+  background:#550000;
+}
+
 #left{
-  left:18px;
-  bottom:10px;
-  width:72px;
-  height:72px;
-  font-size:28px;
+  left:14px;
+  bottom:5px;
+  width:68px;
+  height:68px;
+  font-size:27px;
 }
 
 #right{
-  left:102px;
-  bottom:10px;
-  width:72px;
-  height:72px;
-  font-size:28px;
+  left:92px;
+  bottom:5px;
+  width:68px;
+  height:68px;
+  font-size:27px;
 }
 
 #missile{
-  right:102px;
-  bottom:10px;
+  right:92px;
+  bottom:5px;
   width:82px;
-  height:72px;
-  font-size:12px;
+  height:68px;
+  font-size:11px;
 }
 
 #bomb{
-  right:12px;
-  bottom:10px;
-  width:82px;
-  height:72px;
-  font-size:12px;
+  right:8px;
+  bottom:5px;
+  width:76px;
+  height:68px;
+  font-size:11px;
 }
 
 #screen{
   position:fixed;
   inset:0;
-  z-index:50;
+  z-index:100;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:rgba(0,0,0,.88);
-  color:white;
+  background:rgba(0,0,0,.90);
+  color:#fff;
   text-align:center;
-  padding:25px;
+  padding:20px;
 }
 
 .panel{
-  width:min(90vw,420px);
+  width:min(90vw,430px);
   padding:28px 20px;
   border:2px solid #e00000;
   border-radius:22px;
-  background:linear-gradient(#100000,#020202);
-  box-shadow:0 0 35px rgba(255,0,0,.5);
+  background:
+    radial-gradient(circle at center,#260000,#050505 70%);
+  box-shadow:0 0 40px rgba(255,0,0,.55);
 }
 
 .panel h1{
   color:#ff2020;
   font-size:28px;
-  margin-bottom:10px;
+  margin-bottom:8px;
   text-shadow:0 0 15px red;
 }
 
 .panel h2{
-  font-size:18px;
+  font-size:19px;
   margin-bottom:12px;
 }
 
 .panel p{
   color:#ddd;
-  line-height:1.5;
-  margin-bottom:18px;
+  line-height:1.6;
+  margin-bottom:20px;
 }
 
 #startBtn{
   border:0;
   border-radius:14px;
-  padding:15px 30px;
+  padding:15px 34px;
   background:#d50000;
-  color:white;
+  color:#fff;
   font-weight:900;
   font-size:17px;
-  box-shadow:0 0 22px red;
+  box-shadow:0 0 25px red;
+}
+
+#startBtn:active{
+  transform:scale(.95);
 }
 
 .hidden{
   display:none !important;
-}
-
-#levelText{
-  color:#fff;
-  font-size:14px;
-  margin-top:3px;
 }
 </style>
 </head>
@@ -205,34 +221,57 @@ html,body{
   <div id="healthBox">
     <div id="health"></div>
   </div>
+
+  <div id="target">
+    TARGET: <span id="targetValue">500</span>
+  </div>
 </div>
 
 <div id="controls">
+
   <button class="control" id="left">◀</button>
+
   <button class="control" id="right">▶</button>
-  <button class="control" id="missile">MISSILE</button>
-  <button class="control" id="bomb">BOMB</button>
+
+  <button class="control" id="missile">
+    🚀 MISSILE
+  </button>
+
+  <button class="control" id="bomb">
+    💣 BOMB
+  </button>
+
 </div>
 
 <div id="screen">
+
   <div class="panel">
+
     <h1>SAMEER THAPA</h1>
-    <h2>AI WAR ROAD</h2>
+
+    <h2>⚡ AI WAR ROAD ⚡</h2>
+
     <p>
       2 MINUTES PER LEVEL<br>
       Destroy the AI villains.<br>
       Reach the target score to PASS.<br>
       Unlimited levels.
     </p>
-    <button id="startBtn">START GAME</button>
+
+    <button id="startBtn">
+      START GAME
+    </button>
+
   </div>
+
 </div>
+
 
 <script>
 
 /* =========================================================
    SAMEER THAPA - AI WAR ROAD
-   SINGLE FILE GAME
+   COMPLETE SINGLE FILE
 ========================================================= */
 
 const canvas=document.getElementById("game");
@@ -241,26 +280,15 @@ const ctx=canvas.getContext("2d");
 let W=0;
 let H=0;
 
-function resize(){
-
-  W=canvas.width=window.innerWidth;
-  H=canvas.height=window.innerHeight;
-
-  if(player){
-    player.x=Math.max(70,Math.min(W-70,player.x));
-  }
-}
-
-window.addEventListener("resize",resize);
-
 
 /* =========================================================
-   GAME STATE
+   GAME VARIABLES
 ========================================================= */
 
 let running=false;
 
 let level=1;
+
 let score=0;
 
 const LEVEL_TIME=120;
@@ -274,11 +302,21 @@ let lastFrame=0;
 let enemyTimer=0;
 
 let missileCooldown=0;
+
 let bombCooldown=0;
 
 let shake=0;
 
 let roadOffset=0;
+
+let levelMessage="";
+
+let levelMessageTimer=0;
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
 
 let keys={
   left:false,
@@ -291,12 +329,25 @@ let keys={
 ========================================================= */
 
 let player={
-  x:window.innerWidth/2,
-  y:window.innerHeight*0.66,
+
+  x:0,
+
+  /*
+    IMPORTANT:
+    CAR IS ALWAYS AROUND THE MIDDLE
+    AND ABOVE THE BUTTONS.
+  */
+
+  y:0,
+
   w:72,
+
   h:112,
+
   speed:8,
+
   health:100
+
 };
 
 
@@ -305,9 +356,13 @@ let player={
 ========================================================= */
 
 let missiles=[];
+
 let bombs=[];
+
 let enemies=[];
+
 let explosions=[];
+
 let particles=[];
 
 
@@ -319,57 +374,169 @@ let audioCtx=null;
 
 function startAudio(){
 
-  if(audioCtx) return;
+  if(audioCtx)return;
 
   try{
-    audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+
+    audioCtx=
+      new(window.AudioContext||window.webkitAudioContext)();
+
   }catch(e){}
+
 }
 
-function tone(freq,duration,type="square",volume=.05){
+
+function tone(
+  frequency,
+  duration,
+  type="square",
+  volume=.05
+){
 
   if(!audioCtx)return;
 
-  const osc=audioCtx.createOscillator();
-  const gain=audioCtx.createGain();
+  try{
 
-  osc.type=type;
-  osc.frequency.value=freq;
+    const osc=
+      audioCtx.createOscillator();
 
-  gain.gain.setValueAtTime(volume,audioCtx.currentTime);
-  gain.gain.exponentialRampToValueAtTime(
-    .001,
-    audioCtx.currentTime+duration
-  );
+    const gain=
+      audioCtx.createGain();
 
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
+    osc.type=type;
 
-  osc.start();
-  osc.stop(audioCtx.currentTime+duration);
+    osc.frequency.value=frequency;
+
+    gain.gain.setValueAtTime(
+      volume,
+      audioCtx.currentTime
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      .001,
+      audioCtx.currentTime+duration
+    );
+
+    osc.connect(gain);
+
+    gain.connect(audioCtx.destination);
+
+    osc.start();
+
+    osc.stop(
+      audioCtx.currentTime+duration
+    );
+
+  }catch(e){}
 }
 
-function engineSound(){
-
-  tone(75,.08,"sawtooth",.025);
-}
 
 function missileSound(){
 
-  tone(700,.08,"sawtooth",.06);
-  setTimeout(()=>tone(1100,.08,"sawtooth",.04),35);
+  tone(600,.08,"sawtooth",.07);
+
+  setTimeout(()=>{
+    tone(1000,.10,"square",.05);
+  },40);
+
 }
+
 
 function bombSound(){
 
-  tone(90,.18,"sine",.09);
+  tone(80,.25,"sine",.12);
+
+  setTimeout(()=>{
+    tone(45,.35,"sawtooth",.08);
+  },100);
+
 }
+
 
 function explosionSound(){
 
-  tone(70,.22,"sawtooth",.09);
-  setTimeout(()=>tone(45,.25,"square",.05),60);
+  tone(90,.20,"sawtooth",.10);
+
+  setTimeout(()=>{
+    tone(45,.30,"square",.06);
+  },60);
+
 }
+
+
+function hitSound(){
+
+  tone(180,.06,"square",.04);
+
+}
+
+
+function passSound(){
+
+  tone(500,.12,"square",.06);
+
+  setTimeout(()=>{
+    tone(800,.12,"square",.06);
+  },120);
+
+  setTimeout(()=>{
+    tone(1100,.18,"square",.06);
+  },240);
+
+}
+
+
+function failSound(){
+
+  tone(220,.15,"sawtooth",.06);
+
+  setTimeout(()=>{
+    tone(130,.25,"sawtooth",.07);
+  },160);
+
+}
+
+
+/* =========================================================
+   RESPONSIVE PLAYER POSITION
+========================================================= */
+
+function setPlayerPosition(){
+
+  player.x=Math.max(
+    60,
+    Math.min(W-60,W/2)
+  );
+
+  /*
+    50% SCREEN HEIGHT.
+    This keeps the whole car visible
+    and safely above the controls.
+  */
+
+  player.y=H*.50;
+
+}
+
+
+function resize(){
+
+  W=
+    canvas.width=
+    window.innerWidth;
+
+  H=
+    canvas.height=
+    window.innerHeight;
+
+  setPlayerPosition();
+
+}
+
+window.addEventListener(
+  "resize",
+  resize
+);
 
 
 /* =========================================================
@@ -378,284 +545,686 @@ function explosionSound(){
 
 function drawRoad(){
 
-  ctx.fillStyle="#020202";
-  ctx.fillRect(0,0,W,H);
+  ctx.fillStyle="#010101";
 
-  const roadW=Math.min(W*.86,460);
-  const roadX=(W-roadW)/2;
+  ctx.fillRect(
+    0,
+    0,
+    W,
+    H
+  );
 
-  ctx.fillStyle="#111";
-  ctx.fillRect(roadX,0,roadW,H);
 
-  /* road glow */
+  const roadW=
+    Math.min(
+      W*.88,
+      470
+    );
 
-  ctx.fillStyle="#b00000";
-  ctx.fillRect(roadX,0,5,H);
-  ctx.fillRect(roadX+roadW-5,0,5,H);
+  const roadX=
+    (W-roadW)/2;
 
-  /* lane lines */
 
-  ctx.strokeStyle="#333";
+  /* road */
+
+  ctx.fillStyle="#101010";
+
+  ctx.fillRect(
+    roadX,
+    0,
+    roadW,
+    H
+  );
+
+
+  /* outer glow */
+
+  ctx.fillStyle="#a00000";
+
+  ctx.fillRect(
+    roadX,
+    0,
+    5,
+    H
+  );
+
+  ctx.fillRect(
+    roadX+roadW-5,
+    0,
+    5,
+    H
+  );
+
+
+  /* lanes */
+
+  ctx.strokeStyle="#303030";
+
   ctx.lineWidth=3;
-  ctx.setLineDash([35,35]);
+
+  ctx.setLineDash([
+    35,
+    35
+  ]);
 
   roadOffset+=7;
 
-  ctx.lineDashOffset=roadOffset;
+  ctx.lineDashOffset=
+    roadOffset;
+
 
   for(let i=1;i<3;i++){
 
-    const x=roadX+(roadW/3)*i;
+    const x=
+      roadX+
+      (roadW/3)*i;
 
     ctx.beginPath();
-    ctx.moveTo(x,0);
-    ctx.lineTo(x,H);
+
+    ctx.moveTo(
+      x,
+      0
+    );
+
+    ctx.lineTo(
+      x,
+      H
+    );
+
     ctx.stroke();
+
   }
 
   ctx.setLineDash([]);
 
+
   /* road lights */
 
-  for(let y=40;y<H;y+=100){
+  for(
+    let y=20;
+    y<H+100;
+    y+=100
+  ){
+
+    let yy=
+      (y+roadOffset)%H;
 
     ctx.fillStyle="#ff0000";
 
     ctx.fillRect(
       roadX+10,
-      (y+roadOffset)%H,
+      yy,
       4,
-      20
+      22
     );
 
     ctx.fillRect(
       roadX+roadW-14,
-      (y+roadOffset)%H,
+      yy,
       4,
-      20
+      22
     );
+
   }
+
 }
 
 
 /* =========================================================
-   VIP AI CAR
+   PLAYER - FUTURISTIC AI CAR
 ========================================================= */
 
 function drawPlayer(){
 
   const x=player.x;
 
-  /*
-    FIXED HIGH POSITION
-    Car stays above the lower control area.
-  */
-
   const y=player.y;
 
   ctx.save();
 
+
   /* shadow */
 
-  ctx.fillStyle="rgba(0,0,0,.8)";
-  ctx.fillRect(x-42,y+42,84,18);
+  ctx.fillStyle=
+    "rgba(0,0,0,.8)";
 
-  /* black body */
+  ctx.beginPath();
+
+  ctx.ellipse(
+    x,
+    y+48,
+    44,
+    12,
+    0,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  /* red glow */
+
+  ctx.shadowColor="#ff0000";
+
+  ctx.shadowBlur=18;
+
+
+  /* main black body */
 
   ctx.fillStyle="#050505";
 
   ctx.beginPath();
-  ctx.moveTo(x-34,y+45);
-  ctx.lineTo(x-40,y-20);
-  ctx.lineTo(x-27,y-58);
-  ctx.lineTo(x+27,y-58);
-  ctx.lineTo(x+40,y-20);
-  ctx.lineTo(x+34,y+45);
+
+  ctx.moveTo(
+    x-34,
+    y+45
+  );
+
+  ctx.lineTo(
+    x-42,
+    y-18
+  );
+
+  ctx.lineTo(
+    x-27,
+    y-58
+  );
+
+  ctx.lineTo(
+    x+27,
+    y-58
+  );
+
+  ctx.lineTo(
+    x+42,
+    y-18
+  );
+
+  ctx.lineTo(
+    x+34,
+    y+45
+  );
+
   ctx.closePath();
+
   ctx.fill();
+
+
+  ctx.shadowBlur=0;
+
 
   /* red armor */
 
   ctx.fillStyle="#c40000";
 
   ctx.beginPath();
-  ctx.moveTo(x-28,y+42);
-  ctx.lineTo(x-32,y-18);
-  ctx.lineTo(x-21,y-50);
-  ctx.lineTo(x+21,y-50);
-  ctx.lineTo(x+32,y-18);
-  ctx.lineTo(x+28,y+42);
+
+  ctx.moveTo(
+    x-27,
+    y+42
+  );
+
+  ctx.lineTo(
+    x-32,
+    y-18
+  );
+
+  ctx.lineTo(
+    x-21,
+    y-50
+  );
+
+  ctx.lineTo(
+    x+21,
+    y-50
+  );
+
+  ctx.lineTo(
+    x+32,
+    y-18
+  );
+
+  ctx.lineTo(
+    x+27,
+    y+42
+  );
+
   ctx.closePath();
+
   ctx.fill();
+
 
   /* windshield */
 
-  ctx.fillStyle="#050505";
+  ctx.fillStyle="#02080c";
 
   ctx.beginPath();
-  ctx.moveTo(x-20,y-40);
-  ctx.lineTo(x+20,y-40);
-  ctx.lineTo(x+15,y-8);
-  ctx.lineTo(x-15,y-8);
+
+  ctx.moveTo(
+    x-19,
+    y-40
+  );
+
+  ctx.lineTo(
+    x+19,
+    y-40
+  );
+
+  ctx.lineTo(
+    x+14,
+    y-8
+  );
+
+  ctx.lineTo(
+    x-14,
+    y-8
+  );
+
   ctx.closePath();
+
   ctx.fill();
 
-  /* AI core */
+
+  /* windshield shine */
+
+  ctx.strokeStyle="#ff2020";
+
+  ctx.lineWidth=2;
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    x-14,
+    y-35
+  );
+
+  ctx.lineTo(
+    x+12,
+    y-35
+  );
+
+  ctx.stroke();
+
+
+  /* AI CORE */
 
   ctx.fillStyle="#ff1111";
+
   ctx.shadowColor="red";
-  ctx.shadowBlur=20;
 
-  ctx.fillRect(x-7,y-27,14,9);
+  ctx.shadowBlur=22;
 
-  /* lights */
-
-  ctx.fillRect(x-27,y-51,12,6);
-  ctx.fillRect(x+15,y-51,12,6);
+  ctx.fillRect(
+    x-7,
+    y-27,
+    14,
+    10
+  );
 
   ctx.shadowBlur=0;
+
+
+  /* headlights */
+
+  ctx.fillStyle="#ff4a00";
+
+  ctx.shadowColor="#ff3000";
+
+  ctx.shadowBlur=12;
+
+  ctx.fillRect(
+    x-27,
+    y-51,
+    12,
+    6
+  );
+
+  ctx.fillRect(
+    x+15,
+    y-51,
+    12,
+    6
+  );
+
+  ctx.shadowBlur=0;
+
 
   /* side armor */
 
   ctx.fillStyle="#111";
 
-  ctx.fillRect(x-40,y-5,10,40);
-  ctx.fillRect(x+30,y-5,10,40);
+  ctx.fillRect(
+    x-41,
+    y-5,
+    11,
+    42
+  );
 
-  /* red side lights */
+  ctx.fillRect(
+    x+30,
+    y-5,
+    11,
+    42
+  );
 
-  ctx.fillStyle="#ff3000";
 
-  ctx.fillRect(x-40,y+24,10,6);
-  ctx.fillRect(x+30,y+24,10,6);
+  /* side lights */
+
+  ctx.fillStyle="#ff2200";
+
+  ctx.fillRect(
+    x-41,
+    y+22,
+    11,
+    7
+  );
+
+  ctx.fillRect(
+    x+30,
+    y+22,
+    11,
+    7
+  );
+
 
   /* wheels */
 
   ctx.fillStyle="#000";
 
-  ctx.fillRect(x-38,y+4,9,34);
-  ctx.fillRect(x+29,y+4,9,34);
+  ctx.fillRect(
+    x-39,
+    y+2,
+    10,
+    38
+  );
 
-  /* front weapon ports */
+  ctx.fillRect(
+    x+29,
+    y+2,
+    10,
+    38
+  );
+
+
+  /* wheel red lines */
 
   ctx.fillStyle="#ff0000";
 
-  ctx.fillRect(x-15,y+42,8,4);
-  ctx.fillRect(x+7,y+42,8,4);
+  ctx.fillRect(
+    x-39,
+    y+7,
+    3,
+    25
+  );
+
+  ctx.fillRect(
+    x+36,
+    y+7,
+    3,
+    25
+  );
+
+
+  /* weapon ports */
+
+  ctx.fillStyle="#ff0000";
+
+  ctx.shadowColor="red";
+
+  ctx.shadowBlur=8;
+
+  ctx.fillRect(
+    x-15,
+    y+40,
+    8,
+    5
+  );
+
+  ctx.fillRect(
+    x+7,
+    y+40,
+    8,
+    5
+  );
+
+  ctx.shadowBlur=0;
+
+
+  /* bottom energy */
+
+  ctx.fillStyle="#ff3000";
+
+  ctx.fillRect(
+    x-20,
+    y+48,
+    40,
+    3
+  );
+
 
   ctx.restore();
+
 }
 
 
 /* =========================================================
-   ENEMIES
+   ENEMY SPAWN
 ========================================================= */
 
 function spawnEnemy(){
 
-  const roadW=Math.min(W*.86,460);
-  const roadX=(W-roadW)/2;
-  const laneW=roadW/3;
+  const roadW=
+    Math.min(
+      W*.88,
+      470
+    );
 
-  const lane=Math.floor(Math.random()*3);
+  const roadX=
+    (W-roadW)/2;
+
+  const laneW=
+    roadW/3;
+
+  const lane=
+    Math.floor(
+      Math.random()*3
+    );
 
   const x=
     roadX+
     laneW*lane+
     laneW/2;
 
+
   const hp=
     1+
     Math.floor(level/5);
 
+
   enemies.push({
 
     x:x,
-    y:-100,
+
+    y:-90,
+
     w:58,
+
     h:82,
-    speed:2.5+
-      Math.random()*1.8+
+
+    speed:
+      2.4+
+      Math.random()*1.7+
       level*.12,
+
     hp:hp,
+
     maxHp:hp,
-    type:Math.floor(Math.random()*3)
+
+    type:
+      Math.floor(
+        Math.random()*3
+      )
+
   });
+
 }
 
+
+/* =========================================================
+   ENEMY DRAW
+========================================================= */
 
 function drawEnemy(e){
 
   ctx.save();
 
-  ctx.translate(e.x,e.y);
+  ctx.translate(
+    e.x,
+    e.y
+  );
 
-  /* aura */
 
-  ctx.fillStyle="rgba(255,0,0,.12)";
+  /* danger aura */
+
+  ctx.fillStyle=
+    "rgba(255,0,0,.12)";
+
   ctx.beginPath();
-  ctx.arc(0,0,48,0,Math.PI*2);
+
+  ctx.arc(
+    0,
+    0,
+    45,
+    0,
+    Math.PI*2
+  );
+
   ctx.fill();
+
 
   /* body */
 
   ctx.fillStyle=
-    e.type===0 ? "#230000":
-    e.type===1 ? "#001522":
-                 "#160016";
+    e.type===0
+      ? "#330000"
+      : e.type===1
+        ? "#111"
+        : "#240024";
+
 
   ctx.beginPath();
-  ctx.moveTo(-28,35);
-  ctx.lineTo(-31,-25);
-  ctx.lineTo(-15,-42);
-  ctx.lineTo(15,-42);
-  ctx.lineTo(31,-25);
-  ctx.lineTo(28,35);
+
+  ctx.moveTo(
+    -27,
+    38
+  );
+
+  ctx.lineTo(
+    -31,
+    -25
+  );
+
+  ctx.lineTo(
+    -18,
+    -40
+  );
+
+  ctx.lineTo(
+    18,
+    -40
+  );
+
+  ctx.lineTo(
+    31,
+    -25
+  );
+
+  ctx.lineTo(
+    27,
+    38
+  );
+
   ctx.closePath();
+
   ctx.fill();
+
 
   /* armor */
 
-  ctx.strokeStyle=
-    e.type===0 ? "#ff0000":
-    e.type===1 ? "#00aaff":
-                 "#ff00aa";
+  ctx.strokeStyle="#ff0000";
 
-  ctx.lineWidth=4;
+  ctx.lineWidth=3;
 
   ctx.stroke();
 
-  /* eyes */
 
-  ctx.fillStyle="#ff0000";
-  ctx.shadowColor="red";
-  ctx.shadowBlur=15;
+  /* AI eye */
 
-  ctx.fillRect(-18,-20,10,6);
-  ctx.fillRect(8,-20,10,6);
+  ctx.fillStyle=
+    e.type===2
+      ? "#ff00ff"
+      : "#ff0000";
+
+  ctx.shadowColor=
+    e.type===2
+      ? "#ff00ff"
+      : "#ff0000";
+
+  ctx.shadowBlur=16;
+
+  ctx.fillRect(
+    -14,
+    -17,
+    28,
+    7
+  );
 
   ctx.shadowBlur=0;
 
-  /* weapon */
 
-  ctx.fillStyle="#222";
-  ctx.fillRect(-38,5,10,25);
-  ctx.fillRect(28,5,10,25);
+  /* wheels */
+
+  ctx.fillStyle="#000";
+
+  ctx.fillRect(
+    -31,
+    5,
+    8,
+    27
+  );
+
+  ctx.fillRect(
+    23,
+    5,
+    8,
+    27
+  );
+
+
+  /* hp */
+
+  ctx.fillStyle="#300";
+
+  ctx.fillRect(
+    -25,
+    -53,
+    50,
+    5
+  );
+
+  ctx.fillStyle="#ff0000";
+
+  ctx.fillRect(
+    -25,
+    -53,
+    50*(e.hp/e.maxHp),
+    5
+  );
+
 
   ctx.restore();
 
-  /* HP */
-
-  if(e.hp<e.maxHp){
-
-    const ratio=e.hp/e.maxHp;
-
-    ctx.fillStyle="#400";
-    ctx.fillRect(e.x-30,e.y-55,60,5);
-
-    ctx.fillStyle="#0f0";
-    ctx.fillRect(e.x-30,e.y-55,60*ratio,5);
-  }
 }
 
 
@@ -666,6 +1235,7 @@ function drawEnemy(e){
 function fireMissile(){
 
   if(!running)return;
+
   if(missileCooldown>0)return;
 
   missileCooldown=.35;
@@ -673,29 +1243,15 @@ function fireMissile(){
   missiles.push({
 
     x:player.x,
-    y:player.y-60,
-    speed:13,
-    damage:1
+
+    y:player.y-65,
+
+    vy:-12
+
   });
 
   missileSound();
-}
 
-
-function drawMissile(m){
-
-  ctx.save();
-
-  ctx.fillStyle="#fff";
-  ctx.shadowColor="#ff0000";
-  ctx.shadowBlur=14;
-
-  ctx.fillRect(m.x-3,m.y,6,20);
-
-  ctx.fillStyle="#ff3000";
-  ctx.fillRect(m.x-2,m.y+18,4,10);
-
-  ctx.restore();
 }
 
 
@@ -703,41 +1259,28 @@ function drawMissile(m){
    BOMB
 ========================================================= */
 
-function dropBomb(){
+function fireBomb(){
 
   if(!running)return;
+
   if(bombCooldown>0)return;
 
-  bombCooldown=1.0;
+  bombCooldown=1.2;
 
   bombs.push({
 
     x:player.x,
-    y:player.y-35,
-    speed:6,
-    radius:70
+
+    y:player.y-55,
+
+    vy:-6,
+
+    radius:7
+
   });
 
   bombSound();
-}
 
-
-function drawBomb(b){
-
-  ctx.save();
-
-  ctx.fillStyle="#111";
-  ctx.shadowColor="#ff0000";
-  ctx.shadowBlur=15;
-
-  ctx.beginPath();
-  ctx.arc(b.x,b.y,10,0,Math.PI*2);
-  ctx.fill();
-
-  ctx.fillStyle="#ff0000";
-  ctx.fillRect(b.x-3,b.y-15,6,5);
-
-  ctx.restore();
 }
 
 
@@ -745,368 +1288,1114 @@ function drawBomb(b){
    EXPLOSION
 ========================================================= */
 
-function explode(x,y,power=1){
+function createExplosion(
+  x,
+  y,
+  big=false
+){
 
   explosions.push({
+
     x:x,
+
     y:y,
+
     r:5,
-    max:70*power,
-    life:30
+
+    max:
+      big ? 80 : 45,
+
+    life:0,
+
+    maxLife:
+      big ? 35 : 24
+
   });
 
-  for(let i=0;i<20;i++){
+
+  const count=
+    big ? 30 : 16;
+
+
+  for(
+    let i=0;
+    i<count;
+    i++
+  ){
+
+    const angle=
+      Math.random()*
+      Math.PI*2;
+
+    const speed=
+      1+
+      Math.random()*5;
+
 
     particles.push({
 
       x:x,
+
       y:y,
 
-      vx:(Math.random()-.5)*8,
-      vy:(Math.random()-.5)*8,
+      vx:
+        Math.cos(angle)*speed,
 
-      life:25+
+      vy:
+        Math.sin(angle)*speed,
+
+      life:
+        20+
         Math.random()*25
+
     });
+
   }
+
 
   explosionSound();
 
-  shake=10;
-}
+  shake=
+    big ? 12 : 6;
 
-
-function drawExplosions(){
-
-  for(let i=explosions.length-1;i>=0;i--){
-
-    const e=explosions[i];
-
-    ctx.save();
-
-    ctx.strokeStyle=
-      `rgba(255,${Math.floor(Math.random()*120)},0,${e.life/30})`;
-
-    ctx.lineWidth=6;
-
-    ctx.beginPath();
-    ctx.arc(e.x,e.y,e.r,0,Math.PI*2);
-    ctx.stroke();
-
-    ctx.restore();
-
-    e.r+=4;
-    e.life--;
-
-    if(e.life<=0){
-      explosions.splice(i,1);
-    }
-  }
-
-  for(let i=particles.length-1;i>=0;i--){
-
-    const p=particles[i];
-
-    ctx.fillStyle="#ff3300";
-    ctx.fillRect(p.x,p.y,4,4);
-
-    p.x+=p.vx;
-    p.y+=p.vy;
-    p.vy+=.15;
-    p.life--;
-
-    if(p.life<=0){
-      particles.splice(i,1);
-    }
-  }
 }
 
 
 /* =========================================================
-   COLLISIONS
+   UPDATE MISSILES
 ========================================================= */
-
-function hitEnemy(e,damage){
-
-  e.hp-=damage;
-
-  if(e.hp<=0){
-
-    score+=100+level*10;
-
-    explode(e.x,e.y,1);
-
-    const index=enemies.indexOf(e);
-
-    if(index>=0){
-      enemies.splice(index,1);
-    }
-  }
-}
-
 
 function updateMissiles(){
 
-  for(let i=missiles.length-1;i>=0;i--){
+  for(
+    let i=missiles.length-1;
+    i>=0;
+    i--
+  ){
 
-    const m=missiles[i];
+    const m=
+      missiles[i];
 
-    m.y-=m.speed;
+    m.y+=m.vy;
 
-    let hit=false;
 
-    for(let j=enemies.length-1;j>=0;j--){
+    if(m.y<-50){
 
-      const e=enemies[j];
+      missiles.splice(i,1);
+
+      continue;
+
+    }
+
+
+    /* missile collision */
+
+    for(
+      let j=enemies.length-1;
+      j>=0;
+      j--
+    ){
+
+      const e=
+        enemies[j];
+
 
       if(
         Math.abs(m.x-e.x)<35 &&
-        Math.abs(m.y-e.y)<50
+        Math.abs(m.y-e.y)<45
       ){
 
-        hitEnemy(e,m.damage);
+        e.hp-=1;
 
-        hit=true;
-        break;
-      }
-    }
+        createExplosion(
+          m.x,
+          m.y,
+          false
+        );
 
-    if(hit || m.y<-50){
-      missiles.splice(i,1);
-    }
-  }
-}
+        missiles.splice(i,1);
 
+        hitSound();
 
-function updateBombs(){
+        if(e.hp<=0){
 
-  for(let i=bombs.length-1;i>=0;i--){
+          score+=100;
 
-    const b=bombs[i];
+          createExplosion(
+            e.x,
+            e.y,
+            true
+          );
 
-    b.y-=b.speed;
+          enemies.splice(
+            j,
+            1
+          );
 
-    if(b.y<80){
-
-      explode(b.x,b.y,1.5);
-
-      for(let j=enemies.length-1;j>=0;j--){
-
-        const e=enemies[j];
-
-        const dx=e.x-b.x;
-        const dy=e.y-b.y;
-
-        const dist=Math.sqrt(dx*dx+dy*dy);
-
-        if(dist<b.radius){
-          hitEnemy(e,2);
         }
+
+        break;
+
       }
 
-      bombs.splice(i,1);
     }
+
   }
+
 }
 
 
 /* =========================================================
-   ENEMY UPDATE
+   UPDATE BOMBS
+========================================================= */
+
+function updateBombs(){
+
+  for(
+    let i=bombs.length-1;
+    i>=0;
+    i--
+  ){
+
+    const b=
+      bombs[i];
+
+    b.y+=b.vy;
+
+
+    if(b.y<-50){
+
+      bombs.splice(i,1);
+
+      continue;
+
+    }
+
+
+    for(
+      let j=enemies.length-1;
+      j>=0;
+      j--
+    ){
+
+      const e=
+        enemies[j];
+
+
+      if(
+        Math.abs(b.x-e.x)<45 &&
+        Math.abs(b.y-e.y)<55
+      ){
+
+        const bx=b.x;
+        const by=b.y;
+
+        bombs.splice(
+          i,
+          1
+        );
+
+        createExplosion(
+          bx,
+          by,
+          true
+        );
+
+
+        /* bomb damages nearby enemies */
+
+        for(
+          let k=enemies.length-1;
+          k>=0;
+          k--
+        ){
+
+          const target=
+            enemies[k];
+
+          const dx=
+            target.x-bx;
+
+          const dy=
+            target.y-by;
+
+          const dist=
+            Math.sqrt(
+              dx*dx+
+              dy*dy
+            );
+
+
+          if(dist<100){
+
+            target.hp-=3;
+
+            if(
+              target.hp<=0
+            ){
+
+              score+=100;
+
+              createExplosion(
+                target.x,
+                target.y,
+                true
+              );
+
+              enemies.splice(
+                k,
+                1
+              );
+
+            }
+
+          }
+
+        }
+
+        break;
+
+      }
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   UPDATE ENEMIES
 ========================================================= */
 
 function updateEnemies(){
 
-  for(let i=enemies.length-1;i>=0;i--){
+  for(
+    let i=enemies.length-1;
+    i>=0;
+    i--
+  ){
 
-    const e=enemies[i];
+    const e=
+      enemies[i];
 
     e.y+=e.speed;
+
 
     /* hit player */
 
     if(
       Math.abs(e.x-player.x)<45 &&
-      Math.abs(e.y-player.y)<70
+      Math.abs(e.y-player.y)<65
     ){
 
-      player.health-=12;
+      player.health-=18;
 
-      explode(e.x,e.y,.7);
+      createExplosion(
+        player.x,
+        player.y,
+        false
+      );
 
-      enemies.splice(i,1);
+      enemies.splice(
+        i,
+        1
+      );
+
+      hitSound();
 
       continue;
+
     }
+
 
     /* passed player */
 
-    if(e.y>H+100){
+    if(
+      e.y>H+100
+    ){
+
+      enemies.splice(
+        i,
+        1
+      );
 
       player.health-=5;
 
-      enemies.splice(i,1);
     }
+
   }
+
 }
 
 
 /* =========================================================
-   PLAYER MOVEMENT
+   PARTICLES
 ========================================================= */
 
-function updatePlayer(){
+function updateParticles(){
 
-  if(keys.left){
-    player.x-=player.speed;
+  for(
+    let i=particles.length-1;
+    i>=0;
+    i--
+  ){
+
+    const p=
+      particles[i];
+
+    p.x+=p.vx;
+
+    p.y+=p.vy;
+
+    p.vy+=.08;
+
+    p.life--;
+
+
+    if(p.life<=0){
+
+      particles.splice(
+        i,
+        1
+      );
+
+    }
+
   }
 
-  if(keys.right){
-    player.x+=player.speed;
-  }
-
-  const roadW=Math.min(W*.86,460);
-  const roadX=(W-roadW)/2;
-
-  player.x=Math.max(
-    roadX+45,
-    Math.min(
-      roadX+roadW-45,
-      player.x
-    )
-  );
 }
 
 
 /* =========================================================
-   LEVEL TARGET
+   DRAW MISSILES
+========================================================= */
+
+function drawMissiles(){
+
+  for(const m of missiles){
+
+    ctx.save();
+
+    ctx.fillStyle="#ff3000";
+
+    ctx.shadowColor="#ff0000";
+
+    ctx.shadowBlur=15;
+
+    ctx.fillRect(
+      m.x-3,
+      m.y-18,
+      6,
+      22
+    );
+
+    ctx.fillStyle="#fff";
+
+    ctx.fillRect(
+      m.x-2,
+      m.y-16,
+      4,
+      10
+    );
+
+    ctx.restore();
+
+  }
+
+}
+
+
+/* =========================================================
+   DRAW BOMBS
+========================================================= */
+
+function drawBombs(){
+
+  for(const b of bombs){
+
+    ctx.save();
+
+    ctx.fillStyle="#111";
+
+    ctx.strokeStyle="#ff0000";
+
+    ctx.lineWidth=2;
+
+    ctx.shadowColor="red";
+
+    ctx.shadowBlur=12;
+
+    ctx.beginPath();
+
+    ctx.arc(
+      b.x,
+      b.y,
+      8,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+    ctx.stroke();
+
+    ctx.fillStyle="#ff0000";
+
+    ctx.fillRect(
+      b.x-2,
+      b.y-13,
+      4,
+      6
+    );
+
+    ctx.restore();
+
+  }
+
+}
+
+
+/* =========================================================
+   DRAW EXPLOSIONS
+========================================================= */
+
+function drawExplosions(){
+
+  for(
+    const ex of explosions
+  ){
+
+    const progress=
+      ex.life/ex.maxLife;
+
+    const r=
+      ex.r+
+      (ex.max-ex.r)*
+      progress;
+
+
+    ctx.save();
+
+    ctx.globalAlpha=
+      1-progress;
+
+    ctx.strokeStyle="#ff3300";
+
+    ctx.lineWidth=5;
+
+    ctx.shadowColor="#ff0000";
+
+    ctx.shadowBlur=25;
+
+    ctx.beginPath();
+
+    ctx.arc(
+      ex.x,
+      ex.y,
+      r,
+      0,
+      Math.PI*2
+    );
+
+    ctx.stroke();
+
+    ctx.fillStyle="#ff9900";
+
+    ctx.beginPath();
+
+    ctx.arc(
+      ex.x,
+      ex.y,
+      r*.35,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+    ctx.restore();
+
+  }
+
+}
+
+
+/* =========================================================
+   UPDATE EXPLOSIONS
+========================================================= */
+
+function updateExplosions(){
+
+  for(
+    let i=explosions.length-1;
+    i>=0;
+    i--
+  ){
+
+    const ex=
+      explosions[i];
+
+    ex.life++;
+
+    if(
+      ex.life>=
+      ex.maxLife
+    ){
+
+      explosions.splice(
+        i,
+        1
+      );
+
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   DRAW PARTICLES
+========================================================= */
+
+function drawParticles(){
+
+  for(const p of particles){
+
+    ctx.save();
+
+    ctx.globalAlpha=
+      Math.max(
+        0,
+        p.life/45
+      );
+
+    ctx.fillStyle="#ff3300";
+
+    ctx.fillRect(
+      p.x,
+      p.y,
+      4,
+      4
+    );
+
+    ctx.restore();
+
+  }
+
+}
+
+
+/* =========================================================
+   TARGET
 ========================================================= */
 
 function targetScore(){
 
-  return 500+(level-1)*250;
+  return 500+
+    (level-1)*250;
+
 }
 
 
 /* =========================================================
-   UI
+   LEVEL START
 ========================================================= */
 
-function updateUI(){
+function startLevel(){
 
-  document.getElementById("level").textContent=level;
-  document.getElementById("score").textContent=score;
+  running=true;
 
-  const sec=Math.max(0,Math.ceil(timeLeft));
+  timeLeft=
+    LEVEL_TIME;
 
-  const min=Math.floor(sec/60);
-  const s=sec%60;
+  levelStart=
+    performance.now();
 
-  document.getElementById("time").textContent=
-    String(min).padStart(2,"0")+
-    ":"+
-    String(s).padStart(2,"0");
+  enemyTimer=0;
 
-  document.getElementById("health").style.width=
-    Math.max(0,player.health)+"%";
+  missileCooldown=0;
+
+  bombCooldown=0;
+
+  player.health=100;
+
+  /*
+    THIS IS THE FINAL CAR POSITION.
+    It cannot be reset down by level start.
+  */
+
+  player.y=
+    H*.50;
+
+  player.x=
+    W/2;
+
+
+  missiles.length=0;
+
+  bombs.length=0;
+
+  enemies.length=0;
+
+  explosions.length=0;
+
+  particles.length=0;
+
+
+  document.getElementById(
+    "level"
+  ).textContent=
+    level;
+
+
+  document.getElementById(
+    "targetValue"
+  ).textContent=
+    targetScore();
+
+
+  document.getElementById(
+    "screen"
+  ).classList.add(
+    "hidden"
+  );
+
+
+  passSound();
+
 }
 
 
 /* =========================================================
-   LEVEL PASS / FAIL
+   PASS LEVEL
 ========================================================= */
 
-function showResult(title,message,next){
+function passLevel(){
 
   running=false;
 
-  document.getElementById("screen").classList.remove("hidden");
+  passSound();
 
-  document.querySelector(".panel").innerHTML=`
+  levelMessage=
+    "LEVEL "+level+" PASSED!";
+
+  levelMessageTimer=100;
+
+  level++;
+
+  setTimeout(()=>{
+
+    if(levelMessageTimer>=0){
+
+      startLevel();
+
+    }
+
+  },1200);
+
+}
+
+
+/* =========================================================
+   FAIL LEVEL
+========================================================= */
+
+function failLevel(){
+
+  running=false;
+
+  failSound();
+
+  levelMessage=
+    "LEVEL "+level+" FAILED!";
+
+  levelMessageTimer=100;
+
+
+  setTimeout(()=>{
+
+    levelMessageTimer=0;
+
+    showGameMessage(
+      "LEVEL "+level+" FAILED",
+      "TRY AGAIN"
+    );
+
+  },700);
+
+}
+
+
+/* =========================================================
+   GAME MESSAGE
+========================================================= */
+
+function showGameMessage(
+  title,
+  button
+){
+
+  const screen=
+    document.getElementById(
+      "screen"
+    );
+
+  const panel=
+    screen.querySelector(
+      ".panel"
+    );
+
+
+  panel.innerHTML=`
 
     <h1>${title}</h1>
 
     <h2>SAMEER THAPA</h2>
 
-    <p>${message}</p>
+    <p>
+      SCORE: ${score}<br>
+      LEVEL: ${level}<br>
+      TARGET: ${targetScore()}
+    </p>
 
     <button id="startBtn">
-      ${next ? "NEXT LEVEL" : "RETRY LEVEL"}
+      ${button}
     </button>
+
   `;
 
-  document.getElementById("startBtn")
-    .onclick=()=>{
 
-      if(next){
-        level++;
-      }
+  screen.classList.remove(
+    "hidden"
+  );
 
-      startLevel();
-    };
+
+  document.getElementById(
+    "startBtn"
+  ).onclick=()=>{
+
+    startAudio();
+
+    if(
+      audioCtx &&
+      audioCtx.state==="suspended"
+    ){
+
+      audioCtx.resume();
+
+    }
+
+    startLevel();
+
+  };
+
 }
 
 
 /* =========================================================
-   START LEVEL
+   UPDATE GAME
 ========================================================= */
 
-function startLevel(){
+function update(dt){
 
-  startAudio();
+  if(!running)return;
 
-  if(audioCtx && audioCtx.state==="suspended"){
-    audioCtx.resume();
+
+  /* timer */
+
+  const elapsed=
+    (performance.now()-
+     levelStart)/1000;
+
+
+  timeLeft=
+    Math.max(
+      0,
+      LEVEL_TIME-elapsed
+    );
+
+
+  /* cooldowns */
+
+  missileCooldown=
+    Math.max(
+      0,
+      missileCooldown-dt
+    );
+
+  bombCooldown=
+    Math.max(
+      0,
+      bombCooldown-dt
+    );
+
+
+  /* player movement */
+
+  if(keys.left){
+
+    player.x-=
+      player.speed;
+
   }
 
-  running=true;
+  if(keys.right){
 
-  timeLeft=LEVEL_TIME;
+    player.x+=
+      player.speed;
 
-  levelStart=performance.now();
+  }
 
-  player.health=100;
 
-  /*
-    VIP CAR POSITION
-    This position is intentionally above
-    the bottom controls.
-  */
+  /* road limits */
 
-  player.y=H*.66;
+  const roadW=
+    Math.min(
+      W*.88,
+      470
+    );
 
-  score=score;
+  const roadX=
+    (W-roadW)/2;
 
-  enemies=[];
-  missiles=[];
-  bombs=[];
-  explosions=[];
-  particles=[];
 
-  missileCooldown=0;
-  bombCooldown=0;
+  player.x=
+    Math.max(
+      roadX+45,
+      Math.min(
+        roadX+roadW-45,
+        player.x
+      )
+    );
 
-  document.getElementById("screen")
-    .classList.add("hidden");
 
-  updateUI();
+  /* enemies */
+
+  enemyTimer-=dt;
+
+
+  const spawnRate=
+    Math.max(
+      .28,
+      1.05-
+      level*.025
+    );
+
+
+  if(enemyTimer<=0){
+
+    spawnEnemy();
+
+    enemyTimer=
+      spawnRate;
+
+  }
+
+
+  updateMissiles();
+
+  updateBombs();
+
+  updateEnemies();
+
+  updateParticles();
+
+  updateExplosions();
+
+
+  if(shake>0){
+
+    shake*=.88;
+
+  }
+
+
+  /* health */
+
+  if(player.health<=0){
+
+    player.health=0;
+
+    failLevel();
+
+    return;
+
+  }
+
+
+  /* timer end */
+
+  if(timeLeft<=0){
+
+    if(
+      score>=targetScore()
+    ){
+
+      passLevel();
+
+    }else{
+
+      failLevel();
+
+    }
+
+  }
+
 }
 
 
 /* =========================================================
-   GAME OVER
+   HUD
 ========================================================= */
 
-function failLevel(reason){
+function updateHUD(){
 
-  showResult(
-    "LEVEL FAILED",
-    reason+
-    "<br><br>Target: "+
-    targetScore()+
-    "<br>Your Score: "+
-    score,
-    false
-  );
+  document.getElementById(
+    "level"
+  ).textContent=
+    level;
+
+
+  const total=
+    Math.ceil(
+      timeLeft
+    );
+
+
+  const minutes=
+    Math.floor(
+      total/60
+    );
+
+  const seconds=
+    total%60;
+
+
+  document.getElementById(
+    "time"
+  ).textContent=
+    String(minutes).padStart(2,"0")+
+    ":"+
+    String(seconds).padStart(2,"0");
+
+
+  document.getElementById(
+    "score"
+  ).textContent=
+    score;
+
+
+  document.getElementById(
+    "health"
+  ).style.width=
+    Math.max(
+      0,
+      player.health
+    )+"%";
+
+
+  document.getElementById(
+    "targetValue"
+  ).textContent=
+    targetScore();
+
+}
+
+
+/* =========================================================
+   DRAW
+========================================================= */
+
+function draw(){
+
+  ctx.save();
+
+
+  if(shake>1){
+
+    ctx.translate(
+      (Math.random()-.5)*shake,
+      (Math.random()-.5)*shake
+    );
+
+  }
+
+
+  drawRoad();
+
+  drawMissiles();
+
+  drawBombs();
+
+
+  for(
+    const e of enemies
+  ){
+
+    drawEnemy(e);
+
+  }
+
+
+  /*
+    PLAYER IS DRAWN LAST.
+    So the car is always clearly visible.
+  */
+
+  drawPlayer();
+
+  drawExplosions();
+
+  drawParticles();
+
+
+  ctx.restore();
+
+
+  /* level message */
+
+  if(
+    levelMessageTimer>0
+  ){
+
+    levelMessageTimer--;
+
+    ctx.save();
+
+    ctx.fillStyle=
+      "rgba(0,0,0,.45)";
+
+    ctx.fillRect(
+      0,
+      H*.40,
+      W,
+      100
+    );
+
+
+    ctx.textAlign="center";
+
+    ctx.fillStyle="#ff2222";
+
+    ctx.font=
+      "900 30px Arial";
+
+    ctx.shadowColor="red";
+
+    ctx.shadowBlur=20;
+
+    ctx.fillText(
+      levelMessage,
+      W/2,
+      H*.48
+    );
+
+    ctx.restore();
+
+  }
+
 }
 
 
@@ -1116,290 +2405,176 @@ function failLevel(reason){
 
 function loop(now){
 
-  requestAnimationFrame(loop);
-
-  const dt=Math.min(
-    .05,
-    (now-lastFrame)/1000||0
-  );
+  const dt=
+    Math.min(
+      .05,
+      (now-lastFrame)/1000
+    );
 
   lastFrame=now;
 
-  if(!running){
+  update(dt);
 
-    drawRoad();
-    drawPlayer();
+  draw();
 
-    return;
-  }
+  updateHUD();
 
-  if(shake>0){
+  requestAnimationFrame(
+    loop
+  );
 
-    shake*=.85;
-
-    if(shake<.5)shake=0;
-  }
-
-  ctx.save();
-
-  if(shake){
-    ctx.translate(
-      (Math.random()-.5)*shake,
-      (Math.random()-.5)*shake
-    );
-  }
-
-  drawRoad();
-
-  updatePlayer();
-
-  /* enemy spawning */
-
-  enemyTimer-=dt;
-
-  const spawnRate=
-    Math.max(
-      .25,
-      1.1-level*.025
-    );
-
-  if(enemyTimer<=0){
-
-    spawnEnemy();
-
-    enemyTimer=spawnRate;
-  }
-
-  /* weapons */
-
-  missileCooldown=
-    Math.max(0,missileCooldown-dt);
-
-  bombCooldown=
-    Math.max(0,bombCooldown-dt);
-
-  updateMissiles();
-  updateBombs();
-  updateEnemies();
-
-  /* draw weapons */
-
-  for(const m of missiles){
-    drawMissile(m);
-  }
-
-  for(const b of bombs){
-    drawBomb(b);
-  }
-
-  /* draw enemies */
-
-  for(const e of enemies){
-    drawEnemy(e);
-  }
-
-  /* player */
-
-  drawPlayer();
-
-  drawExplosions();
-
-  ctx.restore();
-
-  /* timer */
-
-  timeLeft-=dt;
-
-  /* health fail */
-
-  if(player.health<=0){
-
-    failLevel(
-      "Your VIP AI car was destroyed."
-    );
-
-    return;
-  }
-
-  /* time finished */
-
-  if(timeLeft<=0){
-
-    timeLeft=0;
-
-    if(score>=targetScore()){
-
-      showResult(
-        "LEVEL PASSED",
-        "Target destroyed!<br>"+
-        "Score: "+score+
-        "<br><br>Get ready for the next AI battle.",
-        true
-      );
-
-    }else{
-
-      failLevel(
-        "Target score was not reached."
-      );
-    }
-
-    return;
-  }
-
-  updateUI();
-
-  /* engine */
-
-  if(Math.random()<.025){
-    engineSound();
-  }
 }
 
 
 /* =========================================================
-   CONTROLS
+   BUTTON CONTROLS
 ========================================================= */
 
-function holdButton(button,down,up){
+function holdButton(
+  element,
+  key
+){
 
-  button.addEventListener(
+  element.addEventListener(
     "pointerdown",
     e=>{
+
       e.preventDefault();
-      down();
+
+      keys[key]=true;
+
     }
   );
 
-  button.addEventListener(
+
+  element.addEventListener(
     "pointerup",
     e=>{
+
       e.preventDefault();
-      up();
+
+      keys[key]=false;
+
     }
   );
 
-  button.addEventListener(
+
+  element.addEventListener(
     "pointercancel",
-    up
+    ()=>{
+
+      keys[key]=false;
+
+    }
   );
 
-  button.addEventListener(
+
+  element.addEventListener(
     "pointerleave",
-    up
+    ()=>{
+
+      keys[key]=false;
+
+    }
   );
+
 }
 
 
 holdButton(
   document.getElementById("left"),
-  ()=>{
-    keys.left=true;
-  },
-  ()=>{
-    keys.left=false;
-  }
+  "left"
 );
 
 
 holdButton(
   document.getElementById("right"),
-  ()=>{
-    keys.right=true;
-  },
-  ()=>{
-    keys.right=false;
-  }
+  "right"
 );
 
 
-document.getElementById("missile")
-.addEventListener(
+/* =========================================================
+   MISSILE BUTTON
+========================================================= */
+
+document.getElementById(
+  "missile"
+).addEventListener(
   "pointerdown",
   e=>{
+
     e.preventDefault();
+
     fireMissile();
+
   }
 );
 
 
-document.getElementById("bomb")
-.addEventListener(
+/* =========================================================
+   BOMB BUTTON
+========================================================= */
+
+document.getElementById(
+  "bomb"
+).addEventListener(
   "pointerdown",
   e=>{
+
     e.preventDefault();
-    dropBomb();
+
+    fireBomb();
+
   }
 );
 
 
 /* =========================================================
-   KEYBOARD
+   START GAME
 ========================================================= */
 
-window.addEventListener(
-  "keydown",
-  e=>{
+document.getElementById(
+  "startBtn"
+).addEventListener(
+  "click",
+  ()=>{
 
-    if(e.key==="ArrowLeft"){
-      keys.left=true;
+    startAudio();
+
+    if(
+      audioCtx &&
+      audioCtx.state==="suspended"
+    ){
+
+      audioCtx.resume();
+
     }
 
-    if(e.key==="ArrowRight"){
-      keys.right=true;
-    }
+    level=1;
 
-    if(e.key===" "){
-      fireMissile();
-    }
+    score=0;
 
-    if(e.key.toLowerCase()==="b"){
-      dropBomb();
-    }
-  }
-);
+    setPlayerPosition();
 
+    startLevel();
 
-window.addEventListener(
-  "keyup",
-  e=>{
-
-    if(e.key==="ArrowLeft"){
-      keys.left=false;
-    }
-
-    if(e.key==="ArrowRight"){
-      keys.right=false;
-    }
   }
 );
 
 
 /* =========================================================
-   START BUTTON
-========================================================= */
-
-document.getElementById("startBtn")
-.onclick=()=>{
-
-  startAudio();
-
-  level=1;
-  score=0;
-
-  startLevel();
-};
-
-
-/* =========================================================
-   START
+   INITIALIZE
 ========================================================= */
 
 resize();
 
-requestAnimationFrame(loop);
+updateHUD();
+
+requestAnimationFrame(
+  loop
+);
 
 </script>
 
 </body>
-</html>
+      </html>
