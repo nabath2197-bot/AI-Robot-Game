@@ -3,162 +3,188 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport"
- content="width=device-width,initial-scale=1.0,
- maximum-scale=1.0,user-scalable=no">
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 
-<title>SAMEER THAPA AI BATTLE</title>
+<title>SAMEER THAPA - AI WAR ROAD</title>
 
 <style>
 *{
+  box-sizing:border-box;
   margin:0;
   padding:0;
-  box-sizing:border-box;
-  user-select:none;
   touch-action:none;
+  user-select:none;
 }
 
-body{
+html,body{
+  width:100%;
+  height:100%;
   overflow:hidden;
-  background:#030303;
+  background:#000;
   font-family:Arial,sans-serif;
 }
 
-canvas{
-  display:block;
+#game{
+  position:fixed;
+  inset:0;
   width:100vw;
   height:100vh;
+  display:block;
+  background:#000;
 }
 
 #hud{
   position:fixed;
   top:10px;
-  left:0;
-  width:100%;
-  padding:0 12px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  color:white;
+  left:10px;
+  right:10px;
   z-index:10;
+  color:white;
   pointer-events:none;
 }
 
-.name{
-  color:#ff2020;
+#name{
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:2px;
+  text-shadow:0 0 12px red;
+}
+
+#info{
+  margin-top:5px;
+  display:flex;
+  justify-content:space-between;
   font-size:13px;
   font-weight:bold;
-  text-shadow:0 0 10px red;
-}
-
-.level{
-  color:#fff;
-  font-size:16px;
-  font-weight:bold;
-}
-
-.timer{
-  color:#ff4040;
-  font-size:19px;
-  font-weight:bold;
-}
-
-.score{
-  font-size:13px;
 }
 
 #healthBox{
-  position:fixed;
-  top:42px;
-  left:50%;
-  transform:translateX(-50%);
-  width:180px;
-  height:10px;
-  border:1px solid #ff2020;
-  z-index:10;
+  margin-top:7px;
+  width:150px;
+  height:9px;
+  border:1px solid white;
+  background:#222;
 }
 
 #health{
   width:100%;
   height:100%;
-  background:#e60000;
+  background:#e00000;
 }
 
 #controls{
   position:fixed;
   left:0;
-  bottom:17%;
-  width:100%;
-  padding:0 18px;
-  display:flex;
-  justify-content:space-between;
+  right:0;
+  bottom:22px;
   z-index:20;
+  height:120px;
+  pointer-events:none;
 }
 
-button{
-  width:70px;
-  height:70px;
-  border-radius:50%;
-  border:2px solid #ff2222;
-  background:rgba(5,5,5,.82);
+.control{
+  position:absolute;
+  pointer-events:auto;
+  border:2px solid #ff2020;
+  background:rgba(10,10,10,.82);
   color:white;
+  font-weight:900;
+  border-radius:16px;
+  box-shadow:0 0 18px rgba(255,0,0,.55);
+  -webkit-tap-highlight-color:transparent;
+}
+
+#left{
+  left:18px;
+  bottom:10px;
+  width:72px;
+  height:72px;
   font-size:28px;
-  box-shadow:
-    0 0 12px red,
-    inset 0 0 15px #500;
 }
 
-button:active{
-  transform:scale(.9);
-  background:#9c0000;
+#right{
+  left:102px;
+  bottom:10px;
+  width:72px;
+  height:72px;
+  font-size:28px;
 }
 
-#fire{
+#missile{
+  right:102px;
+  bottom:10px;
   width:82px;
-  height:82px;
-  font-size:14px;
-  font-weight:bold;
+  height:72px;
+  font-size:12px;
 }
 
 #bomb{
-  width:64px;
-  height:64px;
+  right:12px;
+  bottom:10px;
+  width:82px;
+  height:72px;
   font-size:12px;
-  font-weight:bold;
 }
 
-#levelScreen,
-#finishScreen,
-#adScreen{
+#screen{
   position:fixed;
   inset:0;
   z-index:50;
-  display:none;
+  display:flex;
   align-items:center;
   justify-content:center;
-  flex-direction:column;
-  text-align:center;
+  background:rgba(0,0,0,.88);
   color:white;
-  background:rgba(0,0,0,.94);
+  text-align:center;
+  padding:25px;
 }
 
-#levelScreen h1,
-#finishScreen h1,
-#adScreen h1{
-  color:#ff2222;
-  font-size:38px;
-  text-shadow:0 0 20px red;
+.panel{
+  width:min(90vw,420px);
+  padding:28px 20px;
+  border:2px solid #e00000;
+  border-radius:22px;
+  background:linear-gradient(#100000,#020202);
+  box-shadow:0 0 35px rgba(255,0,0,.5);
 }
 
-#levelScreen p,
-#finishScreen p,
-#adScreen p{
-  margin-top:12px;
+.panel h1{
+  color:#ff2020;
+  font-size:28px;
+  margin-bottom:10px;
+  text-shadow:0 0 15px red;
 }
 
-#adNumber{
-  font-size:52px;
-  color:#ff2222;
-  margin-top:15px;
+.panel h2{
+  font-size:18px;
+  margin-bottom:12px;
+}
+
+.panel p{
+  color:#ddd;
+  line-height:1.5;
+  margin-bottom:18px;
+}
+
+#startBtn{
+  border:0;
+  border-radius:14px;
+  padding:15px 30px;
+  background:#d50000;
+  color:white;
+  font-weight:900;
+  font-size:17px;
+  box-shadow:0 0 22px red;
+}
+
+.hidden{
+  display:none !important;
+}
+
+#levelText{
+  color:#fff;
+  font-size:14px;
+  margin-top:3px;
 }
 </style>
 </head>
@@ -168,166 +194,213 @@ button:active{
 <canvas id="game"></canvas>
 
 <div id="hud">
-  <div class="name">SAMEER THAPA</div>
-  <div class="level">LEVEL <span id="level">1</span></div>
-  <div class="timer" id="timer">02:00</div>
-  <div class="score">SCORE <span id="score">0</span></div>
-</div>
+  <div id="name">SAMEER THAPA</div>
 
-<div id="healthBox">
-  <div id="health"></div>
+  <div id="info">
+    <span>LEVEL <b id="level">1</b></span>
+    <span>TIME <b id="time">02:00</b></span>
+    <span>SCORE <b id="score">0</b></span>
+  </div>
+
+  <div id="healthBox">
+    <div id="health"></div>
+  </div>
 </div>
 
 <div id="controls">
-  <button id="left">◀</button>
-  <button id="fire">MISSILE</button>
-  <button id="bomb">BOMB</button>
-  <button id="right">▶</button>
+  <button class="control" id="left">◀</button>
+  <button class="control" id="right">▶</button>
+  <button class="control" id="missile">MISSILE</button>
+  <button class="control" id="bomb">BOMB</button>
 </div>
 
-<div id="levelScreen">
-  <h1>LEVEL <span id="levelText">1</span></h1>
-  <p>AI BATTLE STARTING...</p>
-</div>
-
-<div id="finishScreen">
-  <h1>RUN FINISHED</h1>
-  <p>LEVEL <span id="finishLevel">1</span></p>
-  <p>SCORE <span id="finishScore">0</span></p>
-</div>
-
-<div id="adScreen">
-  <h1>AD BREAK</h1>
-  <div id="adNumber">15</div>
-  <p>NEXT BATTLE LOADING...</p>
+<div id="screen">
+  <div class="panel">
+    <h1>SAMEER THAPA</h1>
+    <h2>AI WAR ROAD</h2>
+    <p>
+      2 MINUTES PER LEVEL<br>
+      Destroy the AI villains.<br>
+      Reach the target score to PASS.<br>
+      Unlimited levels.
+    </p>
+    <button id="startBtn">START GAME</button>
+  </div>
 </div>
 
 <script>
+
+/* =========================================================
+   SAMEER THAPA - AI WAR ROAD
+   SINGLE FILE GAME
+========================================================= */
+
 const canvas=document.getElementById("game");
 const ctx=canvas.getContext("2d");
 
-let W=innerWidth;
-let H=innerHeight;
+let W=0;
+let H=0;
 
 function resize(){
-  W=canvas.width=innerWidth;
-  H=canvas.height=innerHeight;
+
+  W=canvas.width=window.innerWidth;
+  H=canvas.height=window.innerHeight;
+
+  if(player){
+    player.x=Math.max(70,Math.min(W-70,player.x));
+  }
 }
 
-addEventListener("resize",resize);
+window.addEventListener("resize",resize);
 
-/* AUDIO */
 
-let audio=null;
+/* =========================================================
+   GAME STATE
+========================================================= */
 
-function initAudio(){
-  if(audio) return;
-
-  audio=new (window.AudioContext||
-             window.webkitAudioContext)();
-}
-
-function sound(freq,duration,type="square",volume=.08){
-
-  if(!audio) return;
-
-  const osc=audio.createOscillator();
-  const gain=audio.createGain();
-
-  osc.type=type;
-  osc.frequency.value=freq;
-
-  gain.gain.setValueAtTime(
-    volume,
-    audio.currentTime
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-    .001,
-    audio.currentTime+duration
-  );
-
-  osc.connect(gain);
-  gain.connect(audio.destination);
-
-  osc.start();
-  osc.stop(audio.currentTime+duration);
-}
-
-function missileSound(){
-  sound(180,.08,"sawtooth",.12);
-
-  setTimeout(()=>{
-    sound(420,.12,"sawtooth",.1);
-  },50);
-}
-
-function bombSound(){
-  sound(70,.4,"sawtooth",.18);
-
-  setTimeout(()=>{
-    sound(35,.5,"square",.15);
-  },120);
-}
-
-function hitSound(){
-  sound(90,.15,"square",.13);
-}
-
-/* GAME */
+let running=false;
 
 let level=1;
 let score=0;
 
-let runStart=0;
-const RUN_TIME=120000;
+const LEVEL_TIME=120;
 
-let running=false;
+let timeLeft=LEVEL_TIME;
 
-let left=false;
-let right=false;
+let levelStart=0;
+
+let lastFrame=0;
+
+let enemyTimer=0;
+
+let missileCooldown=0;
+let bombCooldown=0;
+
+let shake=0;
+
+let roadOffset=0;
+
+let keys={
+  left:false,
+  right:false
+};
+
+
+/* =========================================================
+   PLAYER
+========================================================= */
+
+let player={
+  x:window.innerWidth/2,
+  y:window.innerHeight*0.66,
+  w:72,
+  h:112,
+  speed:8,
+  health:100
+};
+
+
+/* =========================================================
+   OBJECTS
+========================================================= */
 
 let missiles=[];
 let bombs=[];
 let enemies=[];
 let explosions=[];
+let particles=[];
 
-let enemyTimer=0;
 
-let player={
-  x:W/2,
-  y:H-150,
-  w:66,
-  h:108,
-  speed:8,
-  health:100
-};
+/* =========================================================
+   AUDIO
+========================================================= */
 
-/* ROAD */
+let audioCtx=null;
 
-let roadOffset=0;
+function startAudio(){
+
+  if(audioCtx) return;
+
+  try{
+    audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  }catch(e){}
+}
+
+function tone(freq,duration,type="square",volume=.05){
+
+  if(!audioCtx)return;
+
+  const osc=audioCtx.createOscillator();
+  const gain=audioCtx.createGain();
+
+  osc.type=type;
+  osc.frequency.value=freq;
+
+  gain.gain.setValueAtTime(volume,audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(
+    .001,
+    audioCtx.currentTime+duration
+  );
+
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+
+  osc.start();
+  osc.stop(audioCtx.currentTime+duration);
+}
+
+function engineSound(){
+
+  tone(75,.08,"sawtooth",.025);
+}
+
+function missileSound(){
+
+  tone(700,.08,"sawtooth",.06);
+  setTimeout(()=>tone(1100,.08,"sawtooth",.04),35);
+}
+
+function bombSound(){
+
+  tone(90,.18,"sine",.09);
+}
+
+function explosionSound(){
+
+  tone(70,.22,"sawtooth",.09);
+  setTimeout(()=>tone(45,.25,"square",.05),60);
+}
+
+
+/* =========================================================
+   ROAD
+========================================================= */
 
 function drawRoad(){
 
-  ctx.fillStyle="#030303";
+  ctx.fillStyle="#020202";
   ctx.fillRect(0,0,W,H);
 
-  const roadW=Math.min(W*.84,440);
+  const roadW=Math.min(W*.86,460);
   const roadX=(W-roadW)/2;
 
-  ctx.fillStyle="#151515";
+  ctx.fillStyle="#111";
   ctx.fillRect(roadX,0,roadW,H);
 
-  ctx.fillStyle="#9d0000";
+  /* road glow */
 
+  ctx.fillStyle="#b00000";
   ctx.fillRect(roadX,0,5,H);
   ctx.fillRect(roadX+roadW-5,0,5,H);
 
-  ctx.strokeStyle="#444";
+  /* lane lines */
+
+  ctx.strokeStyle="#333";
   ctx.lineWidth=3;
-  ctx.setLineDash([32,32]);
+  ctx.setLineDash([35,35]);
 
   roadOffset+=7;
+
   ctx.lineDashOffset=roadOffset;
 
   for(let i=1;i<3;i++){
@@ -341,668 +414,859 @@ function drawRoad(){
   }
 
   ctx.setLineDash([]);
+
+  /* road lights */
+
+  for(let y=40;y<H;y+=100){
+
+    ctx.fillStyle="#ff0000";
+
+    ctx.fillRect(
+      roadX+10,
+      (y+roadOffset)%H,
+      4,
+      20
+    );
+
+    ctx.fillRect(
+      roadX+roadW-14,
+      (y+roadOffset)%H,
+      4,
+      20
+    );
+  }
 }
 
-/* AI CAR */
+
+/* =========================================================
+   VIP AI CAR
+========================================================= */
 
 function drawPlayer(){
 
   const x=player.x;
+
+  /*
+    FIXED HIGH POSITION
+    Car stays above the lower control area.
+  */
+
   const y=player.y;
 
-ctx.save();
-ctx.translate(0,-180);
+  ctx.save();
+
+  /* shadow */
 
   ctx.fillStyle="rgba(0,0,0,.8)";
-  ctx.fillRect(x-40,y+48,80,18);
+  ctx.fillRect(x-42,y+42,84,18);
+
+  /* black body */
 
   ctx.fillStyle="#050505";
 
   ctx.beginPath();
-  ctx.moveTo(x-33,y+50);
-  ctx.lineTo(x-38,y-20);
-  ctx.lineTo(x-25,y-55);
-  ctx.lineTo(x+25,y-55);
-  ctx.lineTo(x+38,y-20);
-  ctx.lineTo(x+33,y+50);
+  ctx.moveTo(x-34,y+45);
+  ctx.lineTo(x-40,y-20);
+  ctx.lineTo(x-27,y-58);
+  ctx.lineTo(x+27,y-58);
+  ctx.lineTo(x+40,y-20);
+  ctx.lineTo(x+34,y+45);
   ctx.closePath();
   ctx.fill();
 
-  ctx.fillStyle="#c90000";
+  /* red armor */
+
+  ctx.fillStyle="#c40000";
 
   ctx.beginPath();
-  ctx.moveTo(x-27,y+45);
-  ctx.lineTo(x-31,y-18);
-  ctx.lineTo(x-20,y-47);
-  ctx.lineTo(x+20,y-47);
-  ctx.lineTo(x+31,y-18);
-  ctx.lineTo(x+27,y+45);
+  ctx.moveTo(x-28,y+42);
+  ctx.lineTo(x-32,y-18);
+  ctx.lineTo(x-21,y-50);
+  ctx.lineTo(x+21,y-50);
+  ctx.lineTo(x+32,y-18);
+  ctx.lineTo(x+28,y+42);
   ctx.closePath();
   ctx.fill();
 
-  ctx.fillStyle="#070707";
+  /* windshield */
+
+  ctx.fillStyle="#050505";
 
   ctx.beginPath();
-  ctx.moveTo(x-19,y-38);
-  ctx.lineTo(x+19,y-38);
+  ctx.moveTo(x-20,y-40);
+  ctx.lineTo(x+20,y-40);
   ctx.lineTo(x+15,y-8);
   ctx.lineTo(x-15,y-8);
   ctx.closePath();
   ctx.fill();
 
+  /* AI core */
+
   ctx.fillStyle="#ff1111";
   ctx.shadowColor="red";
-  ctx.shadowBlur=18;
+  ctx.shadowBlur=20;
 
-  ctx.fillRect(x-7,y-25,14,8);
+  ctx.fillRect(x-7,y-27,14,9);
 
-  ctx.fillRect(x-26,y-49,12,6);
-  ctx.fillRect(x+14,y-49,12,6);
+  /* lights */
+
+  ctx.fillRect(x-27,y-51,12,6);
+  ctx.fillRect(x+15,y-51,12,6);
 
   ctx.shadowBlur=0;
+
+  /* side armor */
+
   ctx.fillStyle="#111";
 
-  ctx.fillRect(x-38,y-5,10,38);
-  ctx.fillRect(x+28,y-5,10,38);
+  ctx.fillRect(x-40,y-5,10,40);
+  ctx.fillRect(x+30,y-5,10,40);
+
+  /* red side lights */
 
   ctx.fillStyle="#ff3000";
 
-  ctx.fillRect(x-38,y+25,10,5);
-  ctx.fillRect(x+28,y+25,10,5);
+  ctx.fillRect(x-40,y+24,10,6);
+  ctx.fillRect(x+30,y+24,10,6);
+
+  /* wheels */
 
   ctx.fillStyle="#000";
 
-  ctx.fillRect(x-37,y+5,8,31);
-  ctx.fillRect(x+29,y+5,8,31);
+  ctx.fillRect(x-38,y+4,9,34);
+  ctx.fillRect(x+29,y+4,9,34);
+
+  /* front weapon ports */
+
+  ctx.fillStyle="#ff0000";
+
+  ctx.fillRect(x-15,y+42,8,4);
+  ctx.fillRect(x+7,y+42,8,4);
 
   ctx.restore();
 }
 
-/* ENEMY */
+
+/* =========================================================
+   ENEMIES
+========================================================= */
 
 function spawnEnemy(){
 
-  const roadW=Math.min(W*.84,440);
+  const roadW=Math.min(W*.86,460);
   const roadX=(W-roadW)/2;
   const laneW=roadW/3;
 
   const lane=Math.floor(Math.random()*3);
 
-  const type=
-    Math.random()<.35
-    ? "BOSS"
-    : "DRONE";
+  const x=
+    roadX+
+    laneW*lane+
+    laneW/2;
 
   const hp=
-    type==="BOSS"
-    ? 3+level
-    : 1+Math.floor(level/3);
+    1+
+    Math.floor(level/5);
 
   enemies.push({
-    x:roadX+laneW*lane+laneW/2,
+
+    x:x,
     y:-100,
-    w:type==="BOSS"?70:55,
-    h:type==="BOSS"?105:85,
-    speed:
-      type==="BOSS"
-      ? 2.5+level*.18
-      : 3.5+level*.25,
+    w:58,
+    h:82,
+    speed:2.5+
+      Math.random()*1.8+
+      level*.12,
     hp:hp,
-    type:type,
-    fireTimer:Math.random()*1500
+    maxHp:hp,
+    type:Math.floor(Math.random()*3)
   });
 }
+
 
 function drawEnemy(e){
 
   ctx.save();
 
-  const w=e.w;
-  const h=e.h;
+  ctx.translate(e.x,e.y);
 
-  ctx.fillStyle="#030303";
+  /* aura */
+
+  ctx.fillStyle="rgba(255,0,0,.12)";
+  ctx.beginPath();
+  ctx.arc(0,0,48,0,Math.PI*2);
+  ctx.fill();
+
+  /* body */
+
+  ctx.fillStyle=
+    e.type===0 ? "#230000":
+    e.type===1 ? "#001522":
+                 "#160016";
 
   ctx.beginPath();
-  ctx.moveTo(e.x-w/2,e.y+h/2);
-  ctx.lineTo(e.x-w/2-5,e.y);
-  ctx.lineTo(e.x-w/3,e.y-h/2);
-  ctx.lineTo(e.x+w/3,e.y-h/2);
-  ctx.lineTo(e.x+w/2+5,e.y);
-  ctx.lineTo(e.x+w/2,e.y+h/2);
+  ctx.moveTo(-28,35);
+  ctx.lineTo(-31,-25);
+  ctx.lineTo(-15,-42);
+  ctx.lineTo(15,-42);
+  ctx.lineTo(31,-25);
+  ctx.lineTo(28,35);
   ctx.closePath();
   ctx.fill();
 
-  ctx.fillStyle=
-    e.type==="BOSS"
-    ? "#730000"
-    : "#a00000";
+  /* armor */
 
-  ctx.fillRect(
-    e.x-w/2+7,
-    e.y-h/2+10,
-    w-14,
-    h-20
-  );
+  ctx.strokeStyle=
+    e.type===0 ? "#ff0000":
+    e.type===1 ? "#00aaff":
+                 "#ff00aa";
 
-  ctx.fillStyle="#ff2020";
+  ctx.lineWidth=4;
+
+  ctx.stroke();
+
+  /* eyes */
+
+  ctx.fillStyle="#ff0000";
   ctx.shadowColor="red";
-  ctx.shadowBlur=14;
+  ctx.shadowBlur=15;
 
-  ctx.fillRect(e.x-20,e.y-25,13,6);
-  ctx.fillRect(e.x+7,e.y-25,13,6);
+  ctx.fillRect(-18,-20,10,6);
+  ctx.fillRect(8,-20,10,6);
 
-  ctx.fillRect(e.x-6,e.y,12,10);
+  ctx.shadowBlur=0;
 
-  if(e.type==="BOSS"){
+  /* weapon */
 
-    ctx.shadowBlur=0;
-    ctx.fillStyle="#ff3333";
-
-    ctx.beginPath();
-    ctx.moveTo(e.x-30,e.y-45);
-    ctx.lineTo(e.x-45,e.y-65);
-    ctx.lineTo(e.x-20,e.y-50);
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.moveTo(e.x+30,e.y-45);
-    ctx.lineTo(e.x+45,e.y-65);
-    ctx.lineTo(e.x+20,e.y-50);
-    ctx.fill();
-  }
+  ctx.fillStyle="#222";
+  ctx.fillRect(-38,5,10,25);
+  ctx.fillRect(28,5,10,25);
 
   ctx.restore();
+
+  /* HP */
+
+  if(e.hp<e.maxHp){
+
+    const ratio=e.hp/e.maxHp;
+
+    ctx.fillStyle="#400";
+    ctx.fillRect(e.x-30,e.y-55,60,5);
+
+    ctx.fillStyle="#0f0";
+    ctx.fillRect(e.x-30,e.y-55,60*ratio,5);
+  }
 }
 
-/* MISSILE */
+
+/* =========================================================
+   MISSILE
+========================================================= */
 
 function fireMissile(){
 
-  if(!running) return;
+  if(!running)return;
+  if(missileCooldown>0)return;
 
-  initAudio();
-  missileSound();
+  missileCooldown=.35;
 
   missiles.push({
+
     x:player.x,
-    y:player.y-65,
-    speed:14,
+    y:player.y-60,
+    speed:13,
     damage:1
   });
+
+  missileSound();
 }
+
 
 function drawMissile(m){
 
   ctx.save();
 
-  ctx.fillStyle="#ff2200";
-  ctx.shadowColor="red";
-  ctx.shadowBlur=15;
-
-  ctx.fillRect(
-    m.x-4,
-    m.y-18,
-    8,
-    25
-  );
-
   ctx.fillStyle="#fff";
+  ctx.shadowColor="#ff0000";
+  ctx.shadowBlur=14;
 
-  ctx.fillRect(
-    m.x-2,
-    m.y-21,
-    4,
-    5
-  );
+  ctx.fillRect(m.x-3,m.y,6,20);
 
-  ctx.fillStyle="#ffb000";
-
-  ctx.fillRect(
-    m.x-3,
-    m.y+7,
-    6,
-    14
-  );
+  ctx.fillStyle="#ff3000";
+  ctx.fillRect(m.x-2,m.y+18,4,10);
 
   ctx.restore();
 }
 
-/* BOMB */
+
+/* =========================================================
+   BOMB
+========================================================= */
 
 function dropBomb(){
 
-  if(!running) return;
+  if(!running)return;
+  if(bombCooldown>0)return;
 
-  initAudio();
-  bombSound();
+  bombCooldown=1.0;
 
   bombs.push({
+
     x:player.x,
-    y:player.y-30,
-    radius:8,
-    speed:9
+    y:player.y-35,
+    speed:6,
+    radius:70
   });
+
+  bombSound();
 }
+
 
 function drawBomb(b){
 
   ctx.save();
 
-  ctx.fillStyle="#080808";
-  ctx.strokeStyle="#ff2020";
-  ctx.lineWidth=2;
-  ctx.shadowColor="red";
-  ctx.shadowBlur=12;
+  ctx.fillStyle="#111";
+  ctx.shadowColor="#ff0000";
+  ctx.shadowBlur=15;
 
   ctx.beginPath();
-  ctx.arc(b.x,b.y,b.radius,0,Math.PI*2);
+  ctx.arc(b.x,b.y,10,0,Math.PI*2);
   ctx.fill();
-  ctx.stroke();
+
+  ctx.fillStyle="#ff0000";
+  ctx.fillRect(b.x-3,b.y-15,6,5);
 
   ctx.restore();
 }
 
-/* EXPLOSION */
 
-function explosion(x,y,big=false){
+/* =========================================================
+   EXPLOSION
+========================================================= */
+
+function explode(x,y,power=1){
 
   explosions.push({
     x:x,
     y:y,
     r:5,
-    max:big?85:50,
-    life:25
+    max:70*power,
+    life:30
   });
 
-  hitSound();
+  for(let i=0;i<20;i++){
+
+    particles.push({
+
+      x:x,
+      y:y,
+
+      vx:(Math.random()-.5)*8,
+      vy:(Math.random()-.5)*8,
+
+      life:25+
+        Math.random()*25
+    });
+  }
+
+  explosionSound();
+
+  shake=10;
 }
+
 
 function drawExplosions(){
 
-  explosions.forEach(e=>{
+  for(let i=explosions.length-1;i>=0;i--){
+
+    const e=explosions[i];
+
+    ctx.save();
+
+    ctx.strokeStyle=
+      `rgba(255,${Math.floor(Math.random()*120)},0,${e.life/30})`;
+
+    ctx.lineWidth=6;
+
+    ctx.beginPath();
+    ctx.arc(e.x,e.y,e.r,0,Math.PI*2);
+    ctx.stroke();
+
+    ctx.restore();
 
     e.r+=4;
     e.life--;
 
-    ctx.save();
+    if(e.life<=0){
+      explosions.splice(i,1);
+    }
+  }
 
-    ctx.globalAlpha=e.life/25;
+  for(let i=particles.length-1;i>=0;i--){
 
-    ctx.strokeStyle="#ff2020";
-    ctx.lineWidth=7;
+    const p=particles[i];
 
-    ctx.shadowColor="red";
-    ctx.shadowBlur=25;
+    ctx.fillStyle="#ff3300";
+    ctx.fillRect(p.x,p.y,4,4);
 
-    ctx.beginPath();
-    ctx.arc(
-      e.x,
-      e.y,
-      Math.min(e.r,e.max),
-      0,
-      Math.PI*2
-    );
+    p.x+=p.vx;
+    p.y+=p.vy;
+    p.vy+=.15;
+    p.life--;
 
-    ctx.stroke();
-
-    ctx.fillStyle="#ff9d00";
-
-    ctx.beginPath();
-    ctx.arc(
-      e.x,
-      e.y,
-      Math.min(e.r*.35,25),
-      0,
-      Math.PI*2
-    );
-
-    ctx.fill();
-
-    ctx.restore();
-  });
-
-  explosions=
-    explosions.filter(e=>e.life>0);
+    if(p.life<=0){
+      particles.splice(i,1);
+    }
+  }
 }
 
-/* COLLISION */
+
+/* =========================================================
+   COLLISIONS
+========================================================= */
 
 function hitEnemy(e,damage){
 
   e.hp-=damage;
 
-  explosion(e.x,e.y);
-
   if(e.hp<=0){
 
-    score +=
-      e.type==="BOSS"
-      ? 100
-      : 25;
+    score+=100+level*10;
 
-    explosion(e.x,e.y,true);
+    explode(e.x,e.y,1);
 
-    e.dead=true;
+    const index=enemies.indexOf(e);
+
+    if(index>=0){
+      enemies.splice(index,1);
+    }
   }
 }
 
-function updateWeapons(){
 
-  missiles.forEach(m=>{
+function updateMissiles(){
+
+  for(let i=missiles.length-1;i>=0;i--){
+
+    const m=missiles[i];
+
     m.y-=m.speed;
-  });
 
-  bombs.forEach(b=>{
-    b.y-=b.speed;
-  });
+    let hit=false;
 
-  missiles.forEach(m=>{
+    for(let j=enemies.length-1;j>=0;j--){
 
-    enemies.forEach(e=>{
+      const e=enemies[j];
 
       if(
-        !e.dead &&
         Math.abs(m.x-e.x)<35 &&
-        Math.abs(m.y-e.y)<55
+        Math.abs(m.y-e.y)<50
       ){
 
         hitEnemy(e,m.damage);
-        m.y=-100;
+
+        hit=true;
+        break;
       }
-    });
-  });
+    }
 
-  bombs.forEach(b=>{
-
-    enemies.forEach(e=>{
-
-      if(
-        !e.dead &&
-        Math.abs(b.x-e.x)<55 &&
-        Math.abs(b.y-e.y)<70
-      ){
-
-        hitEnemy(e,3);
-        explosion(b.x,b.y,true);
-        b.y=-100;
-      }
-    });
-  });
-
-  missiles=
-    missiles.filter(m=>m.y>-100);
-
-  bombs=
-    bombs.filter(b=>b.y>-100);
+    if(hit || m.y<-50){
+      missiles.splice(i,1);
+    }
+  }
 }
 
-/* ENEMY MOVEMENT */
 
-function updateEnemies(dt){
+function updateBombs(){
 
-  enemies.forEach(e=>{
+  for(let i=bombs.length-1;i>=0;i--){
+
+    const b=bombs[i];
+
+    b.y-=b.speed;
+
+    if(b.y<80){
+
+      explode(b.x,b.y,1.5);
+
+      for(let j=enemies.length-1;j>=0;j--){
+
+        const e=enemies[j];
+
+        const dx=e.x-b.x;
+        const dy=e.y-b.y;
+
+        const dist=Math.sqrt(dx*dx+dy*dy);
+
+        if(dist<b.radius){
+          hitEnemy(e,2);
+        }
+      }
+
+      bombs.splice(i,1);
+    }
+  }
+}
+
+
+/* =========================================================
+   ENEMY UPDATE
+========================================================= */
+
+function updateEnemies(){
+
+  for(let i=enemies.length-1;i>=0;i--){
+
+    const e=enemies[i];
 
     e.y+=e.speed;
 
-    e.fireTimer-=dt;
-
-    if(e.fireTimer<=0){
-
-      e.fireTimer=
-        1800-Math.min(level*50,800);
-
-      if(
-        Math.abs(e.x-player.x)<45 &&
-        Math.abs(e.y-player.y)<400
-      ){
-
-        player.health-=
-          e.type==="BOSS"
-          ? 8
-          : 3;
-
-        explosion(player.x,player.y);
-      }
-    }
+    /* hit player */
 
     if(
-      !e.dead &&
       Math.abs(e.x-player.x)<45 &&
-      Math.abs(e.y-player.y)<75
+      Math.abs(e.y-player.y)<70
     ){
 
-      player.health-=
-        e.type==="BOSS"
-        ? 18
-        : 8;
+      player.health-=12;
 
-      e.dead=true;
+      explode(e.x,e.y,.7);
 
-      explosion(
-        player.x,
-        player.y,
-        true
-      );
+      enemies.splice(i,1);
+
+      continue;
     }
-  });
 
-  enemies=
-    enemies.filter(
-      e=>!e.dead && e.y<H+150
-    );
+    /* passed player */
+
+    if(e.y>H+100){
+
+      player.health-=5;
+
+      enemies.splice(i,1);
+    }
+  }
 }
 
-/* PLAYER */
+
+/* =========================================================
+   PLAYER MOVEMENT
+========================================================= */
 
 function updatePlayer(){
 
-  if(left) player.x-=player.speed;
-  if(right) player.x+=player.speed;
+  if(keys.left){
+    player.x-=player.speed;
+  }
 
-  const roadW=Math.min(W*.84,440);
+  if(keys.right){
+    player.x+=player.speed;
+  }
+
+  const roadW=Math.min(W*.86,460);
   const roadX=(W-roadW)/2;
 
   player.x=Math.max(
-    roadX+42,
+    roadX+45,
     Math.min(
-      roadX+roadW-42,
+      roadX+roadW-45,
       player.x
     )
   );
 }
 
-/* LEVEL */
 
-function updateLevel(now){
+/* =========================================================
+   LEVEL TARGET
+========================================================= */
 
-  const elapsed=now-runStart;
+function targetScore(){
 
-  const remaining=
-    Math.max(0,RUN_TIME-elapsed);
+  return 500+(level-1)*250;
+}
 
-  const sec=Math.ceil(remaining/1000);
+
+/* =========================================================
+   UI
+========================================================= */
+
+function updateUI(){
+
+  document.getElementById("level").textContent=level;
+  document.getElementById("score").textContent=score;
+
+  const sec=Math.max(0,Math.ceil(timeLeft));
 
   const min=Math.floor(sec/60);
   const s=sec%60;
 
-  document.getElementById("timer")
-    .textContent=
-      String(min).padStart(2,"0")+
-      ":"+
-      String(s).padStart(2,"0");
+  document.getElementById("time").textContent=
+    String(min).padStart(2,"0")+
+    ":"+
+    String(s).padStart(2,"0");
 
-  document.getElementById("score")
-    .textContent=score;
-
-  document.getElementById("level")
-    .textContent=level;
-
-  document.getElementById("health")
-    .style.width=
-      Math.max(0,player.health)+"%";
-
-  return remaining;
+  document.getElementById("health").style.width=
+    Math.max(0,player.health)+"%";
 }
 
-/* MAIN LOOP */
 
-let last=0;
+/* =========================================================
+   LEVEL PASS / FAIL
+========================================================= */
+
+function showResult(title,message,next){
+
+  running=false;
+
+  document.getElementById("screen").classList.remove("hidden");
+
+  document.querySelector(".panel").innerHTML=`
+
+    <h1>${title}</h1>
+
+    <h2>SAMEER THAPA</h2>
+
+    <p>${message}</p>
+
+    <button id="startBtn">
+      ${next ? "NEXT LEVEL" : "RETRY LEVEL"}
+    </button>
+  `;
+
+  document.getElementById("startBtn")
+    .onclick=()=>{
+
+      if(next){
+        level++;
+      }
+
+      startLevel();
+    };
+}
+
+
+/* =========================================================
+   START LEVEL
+========================================================= */
+
+function startLevel(){
+
+  startAudio();
+
+  if(audioCtx && audioCtx.state==="suspended"){
+    audioCtx.resume();
+  }
+
+  running=true;
+
+  timeLeft=LEVEL_TIME;
+
+  levelStart=performance.now();
+
+  player.health=100;
+
+  /*
+    VIP CAR POSITION
+    This position is intentionally above
+    the bottom controls.
+  */
+
+  player.y=H*.66;
+
+  score=score;
+
+  enemies=[];
+  missiles=[];
+  bombs=[];
+  explosions=[];
+  particles=[];
+
+  missileCooldown=0;
+  bombCooldown=0;
+
+  document.getElementById("screen")
+    .classList.add("hidden");
+
+  updateUI();
+}
+
+
+/* =========================================================
+   GAME OVER
+========================================================= */
+
+function failLevel(reason){
+
+  showResult(
+    "LEVEL FAILED",
+    reason+
+    "<br><br>Target: "+
+    targetScore()+
+    "<br>Your Score: "+
+    score,
+    false
+  );
+}
+
+
+/* =========================================================
+   MAIN LOOP
+========================================================= */
 
 function loop(now){
 
-  if(!running) return;
+  requestAnimationFrame(loop);
 
-  const dt=now-last||16;
-  last=now;
+  const dt=Math.min(
+    .05,
+    (now-lastFrame)/1000||0
+  );
 
-  ctx.clearRect(0,0,W,H);
+  lastFrame=now;
+
+  if(!running){
+
+    drawRoad();
+    drawPlayer();
+
+    return;
+  }
+
+  if(shake>0){
+
+    shake*=.85;
+
+    if(shake<.5)shake=0;
+  }
+
+  ctx.save();
+
+  if(shake){
+    ctx.translate(
+      (Math.random()-.5)*shake,
+      (Math.random()-.5)*shake
+    );
+  }
 
   drawRoad();
 
   updatePlayer();
 
-  enemyTimer+=dt;
+  /* enemy spawning */
+
+  enemyTimer-=dt;
 
   const spawnRate=
     Math.max(
-      400,
-      1150-level*35
+      .25,
+      1.1-level*.025
     );
 
-  if(enemyTimer>spawnRate){
+  if(enemyTimer<=0){
 
     spawnEnemy();
-    enemyTimer=0;
 
-    if(level>=5 && Math.random()<.25){
-      setTimeout(spawnEnemy,100);
-    }
+    enemyTimer=spawnRate;
   }
 
-  updateEnemies(dt);
-  updateWeapons();
+  /* weapons */
 
-  missiles.forEach(drawMissile);
-  bombs.forEach(drawBomb);
+  missileCooldown=
+    Math.max(0,missileCooldown-dt);
+
+  bombCooldown=
+    Math.max(0,bombCooldown-dt);
+
+  updateMissiles();
+  updateBombs();
+  updateEnemies();
+
+  /* draw weapons */
+
+  for(const m of missiles){
+    drawMissile(m);
+  }
+
+  for(const b of bombs){
+    drawBomb(b);
+  }
+
+  /* draw enemies */
+
+  for(const e of enemies){
+    drawEnemy(e);
+  }
+
+  /* player */
 
   drawPlayer();
-  enemies.forEach(drawEnemy);
 
   drawExplosions();
 
-  const remaining=updateLevel(now);
+  ctx.restore();
+
+  /* timer */
+
+  timeLeft-=dt;
+
+  /* health fail */
 
   if(player.health<=0){
 
-    finishRun();
+    failLevel(
+      "Your VIP AI car was destroyed."
+    );
+
     return;
   }
 
-  if(remaining<=0){
+  /* time finished */
 
-    finishRun();
-    return;
-  }
+  if(timeLeft<=0){
 
-  requestAnimationFrame(loop);
-}
+    timeLeft=0;
 
-/* RUN / AD */
+    if(score>=targetScore()){
 
-function startRun(){
+      showResult(
+        "LEVEL PASSED",
+        "Target destroyed!<br>"+
+        "Score: "+score+
+        "<br><br>Get ready for the next AI battle.",
+        true
+      );
 
-  player.health=100;
+    }else{
 
-  missiles=[];
-  bombs=[];
-  enemies=[];
-  explosions=[];
-
-  runStart=performance.now();
-  last=performance.now();
-
-  running=true;
-
-  document.getElementById("level")
-    .textContent=level;
-
-  document.getElementById("levelScreen")
-    .style.display="none";
-
-  document.getElementById("finishScreen")
-    .style.display="none";
-
-  document.getElementById("adScreen")
-    .style.display="none";
-
-  requestAnimationFrame(loop);
-}
-
-function finishRun(){
-
-  if(!running) return;
-
-  running=false;
-
-  document.getElementById("finishLevel")
-    .textContent=level;
-
-  document.getElementById("finishScore")
-    .textContent=score;
-
-  document.getElementById("finishScreen")
-    .style.display="flex";
-
-  setTimeout(showAd,1200);
-}
-
-function showAd(){
-
-  document.getElementById("finishScreen")
-    .style.display="none";
-
-  document.getElementById("adScreen")
-    .style.display="flex";
-
-  let n=15;
-
-  document.getElementById("adNumber")
-    .textContent=n;
-
-  const adTimer=setInterval(()=>{
-
-    n--;
-
-    document.getElementById("adNumber")
-      .textContent=n;
-
-    if(n<=0){
-
-      clearInterval(adTimer);
-
-      level++;
-
-      document.getElementById("levelText")
-        .textContent=level;
-
-      document.getElementById("levelScreen")
-        .style.display="flex";
-
-      setTimeout(startRun,1000);
+      failLevel(
+        "Target score was not reached."
+      );
     }
 
-  },1000);
+    return;
+  }
+
+  updateUI();
+
+  /* engine */
+
+  if(Math.random()<.025){
+    engineSound();
+  }
 }
 
-/* BUTTONS */
 
-function hold(button,down,up){
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+function holdButton(button,down,up){
 
   button.addEventListener(
     "pointerdown",
     e=>{
       e.preventDefault();
-      initAudio();
       down();
     }
   );
@@ -1026,59 +1290,114 @@ function hold(button,down,up){
   );
 }
 
-hold(
+
+holdButton(
   document.getElementById("left"),
-  ()=>left=true,
-  ()=>left=false
+  ()=>{
+    keys.left=true;
+  },
+  ()=>{
+    keys.left=false;
+  }
 );
 
-hold(
+
+holdButton(
   document.getElementById("right"),
-  ()=>right=true,
-  ()=>right=false
+  ()=>{
+    keys.right=true;
+  },
+  ()=>{
+    keys.right=false;
+  }
 );
 
-document.getElementById("fire")
-  .addEventListener("pointerdown",e=>{
+
+document.getElementById("missile")
+.addEventListener(
+  "pointerdown",
+  e=>{
     e.preventDefault();
-    initAudio();
     fireMissile();
-  });
+  }
+);
+
 
 document.getElementById("bomb")
-  .addEventListener("pointerdown",e=>{
+.addEventListener(
+  "pointerdown",
+  e=>{
     e.preventDefault();
-    initAudio();
     dropBomb();
-  });
+  }
+);
 
-/* KEYBOARD */
 
-addEventListener("keydown",e=>{
+/* =========================================================
+   KEYBOARD
+========================================================= */
 
-  if(e.key==="ArrowLeft") left=true;
-  if(e.key==="ArrowRight") right=true;
+window.addEventListener(
+  "keydown",
+  e=>{
 
-  if(e.key===" ") fireMissile();
+    if(e.key==="ArrowLeft"){
+      keys.left=true;
+    }
 
-  if(e.key.toLowerCase()==="b")
-    dropBomb();
-});
+    if(e.key==="ArrowRight"){
+      keys.right=true;
+    }
 
-addEventListener("keyup",e=>{
+    if(e.key===" "){
+      fireMissile();
+    }
 
-  if(e.key==="ArrowLeft") left=false;
-  if(e.key==="ArrowRight") right=false;
-});
+    if(e.key.toLowerCase()==="b"){
+      dropBomb();
+    }
+  }
+);
 
-/* START */
+
+window.addEventListener(
+  "keyup",
+  e=>{
+
+    if(e.key==="ArrowLeft"){
+      keys.left=false;
+    }
+
+    if(e.key==="ArrowRight"){
+      keys.right=false;
+    }
+  }
+);
+
+
+/* =========================================================
+   START BUTTON
+========================================================= */
+
+document.getElementById("startBtn")
+.onclick=()=>{
+
+  startAudio();
+
+  level=1;
+  score=0;
+
+  startLevel();
+};
+
+
+/* =========================================================
+   START
+========================================================= */
 
 resize();
 
-document.getElementById("levelScreen")
-  .style.display="flex";
-
-setTimeout(startRun,1200);
+requestAnimationFrame(loop);
 
 </script>
 
