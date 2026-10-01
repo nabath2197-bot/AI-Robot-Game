@@ -1,0 +1,13 @@
+{
+  "name": "MS-MS ROBOT",
+  "short_name": "MS-MS ROBOT",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#02040b",
+  "theme_color": "#02040b",
+  "description": "MS-MS ROBOT futuristic AI robot action game.",
+  "lang": "en"
+}
