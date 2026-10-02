@@ -143,7 +143,17 @@ canvas{
   color:#ffe45c;
   text-shadow:0 0 10px #ffcf20;
 }
-
+#targetRule{
+  margin-top:5px;
+  font-size:11px;
+  font-weight:bold;
+  color:#ffffff;
+}
+#remaining{
+  color:#ffcf3d;
+  font-size:15px;
+}
+  
 #missionKills{
   margin-top:3px;
   font-size:14px;
@@ -425,7 +435,10 @@ input{
     /
     <span id="target3">10</span>
   </div>
-
+<div id="targetRule">
+  <span id="remaining">10</span> MORE KILLS → NEXT LEVEL
+</div>
+  
 </div>
 
 <div id="bossWrap">
@@ -878,7 +891,29 @@ function checkTarget(){
 
     levelChanging=true;
 
-    nextLevel();
+    const next=level+1;
+    const oldTarget=targetKills;
+
+    const msg=document.getElementById("levelMessage");
+
+    msg.innerHTML=`
+      🎯 TARGET COMPLETE!<br>
+      <span style="font-size:16px;color:#00ff9d">
+        ${oldTarget} / ${oldTarget} ENEMIES DESTROYED
+      </span><br>
+      <span style="font-size:14px;color:#ffe45c">
+        LEVEL ${next} UNLOCKED!
+      </span>
+    `;
+
+    msg.classList.add("show");
+
+    levelSound();
+
+    setTimeout(()=>{
+      msg.classList.remove("show");
+      nextLevel();
+    },1400);
   }
 }
 
@@ -992,7 +1027,11 @@ function updateHUD(){
 
   document.getElementById("kills")
     .textContent=levelKills;
+const remaining =
+  Math.max(0, targetKills - levelKills);
 
+document.getElementById("remaining")
+  .textContent = remaining;
   let min=Math.floor(timeLeft/60);
   let sec=timeLeft%60;
 
