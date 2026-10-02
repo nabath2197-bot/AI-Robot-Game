@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
 <title>MS-MS ROBOT • CORE BREAKER</title>
 
 <style>
@@ -19,7 +19,7 @@ html,body{
   height:100%;
   overflow:hidden;
   background:#02030a;
-  font-family:Arial,Helvetica,sans-serif;
+  font-family:Arial,sans-serif;
   color:white;
   touch-action:none;
 }
@@ -30,7 +30,7 @@ html,body{
   height:100%;
   overflow:hidden;
   background:
-    radial-gradient(circle at 50% 35%,#101d3d 0%,#050817 42%,#010208 100%);
+  radial-gradient(circle at 50% 35%,#101d3d,#050817 45%,#010208);
 }
 
 canvas{
@@ -44,50 +44,40 @@ canvas{
 
 #hud{
   position:absolute;
-  top:8px;
-  left:8px;
-  right:8px;
+  top:7px;
+  left:7px;
+  right:7px;
   z-index:20;
   display:flex;
   justify-content:space-between;
-  align-items:flex-start;
-  gap:5px;
+  gap:4px;
   pointer-events:none;
 }
 
 .hudBox{
-  min-width:64px;
-  padding:5px 7px;
-  border:1px solid rgba(0,220,255,.45);
+  min-width:60px;
+  padding:5px 5px;
+  border:1px solid rgba(0,220,255,.5);
   border-radius:8px;
-  background:rgba(2,8,25,.78);
-  box-shadow:0 0 10px rgba(0,200,255,.15);
+  background:rgba(2,8,25,.85);
   text-align:center;
-  font-size:9px;
+  font-size:8px;
 }
 
 .hudValue{
   display:block;
   margin-top:2px;
-  font-size:14px;
+  font-size:13px;
   font-weight:bold;
   color:#63eaff;
 }
 
-#targetBox{
-  border-color:rgba(255,220,60,.7);
-}
-
-#targetBox .hudValue{
-  color:#ffe75a;
-}
-
 #energyWrap{
   position:absolute;
-  top:62px;
-  left:10px;
-  right:10px;
-  height:11px;
+  top:56px;
+  left:9px;
+  right:9px;
+  height:10px;
   z-index:20;
   border:1px solid #25dfff;
   border-radius:10px;
@@ -99,54 +89,75 @@ canvas{
   width:100%;
   height:100%;
   background:linear-gradient(90deg,#00eaff,#00ff88);
-  box-shadow:0 0 12px #00eaff;
-  transition:width .15s;
 }
 
 /* PLAYER NAME */
 
 #playerName{
   position:absolute;
-  top:78px;
+  top:72px;
   left:50%;
   transform:translateX(-50%);
   z-index:20;
-  font-size:11px;
+  font-size:10px;
   color:#fff;
-  padding:4px 12px;
+  padding:3px 12px;
   border:1px solid rgba(0,230,255,.35);
   border-radius:20px;
-  background:rgba(0,10,30,.6);
+  background:rgba(0,10,30,.65);
 }
 
-/* MISSION */
+/* ==============================
+   BIG TARGET BOX
+   ============================== */
 
 #mission{
   position:absolute;
-  top:105px;
+  top:100px;
   left:50%;
   transform:translateX(-50%);
-  z-index:20;
-  width:90%;
+  z-index:30;
+  width:92%;
   max-width:400px;
   text-align:center;
-  padding:7px;
-  border-radius:10px;
-  border:1px solid rgba(255,220,60,.4);
-  background:rgba(8,10,25,.72);
+  padding:10px 8px;
+  border:2px solid #ffe45c;
+  border-radius:15px;
+  background:rgba(5,10,28,.95);
+  box-shadow:
+    0 0 12px rgba(255,220,60,.4),
+    inset 0 0 12px rgba(255,220,60,.08);
 }
 
 #missionTitle{
-  font-size:10px;
-  color:#6defff;
+  font-size:11px;
+  font-weight:bold;
+  color:#55edff;
+  letter-spacing:1px;
 }
 
 #missionTarget{
-  font-size:16px;
-  font-weight:bold;
-  color:#ffe95a;
-  margin-top:2px;
+  margin-top:3px;
+  font-size:21px;
+  font-weight:900;
+  color:#ffe45c;
+  text-shadow:0 0 10px #ffcf20;
 }
+
+#missionKills{
+  margin-top:3px;
+  font-size:14px;
+  font-weight:bold;
+  color:white;
+}
+
+#kills,
+#target3{
+  color:#00ff9d;
+  font-size:18px;
+}
+
+/* LEVEL MESSAGE */
 
 #levelMessage{
   position:absolute;
@@ -156,10 +167,10 @@ canvas{
   z-index:60;
   opacity:0;
   pointer-events:none;
-  padding:18px 25px;
+  padding:18px 28px;
   border:2px solid #00eaff;
   border-radius:18px;
-  background:rgba(0,8,25,.92);
+  background:rgba(0,8,25,.94);
   box-shadow:0 0 35px #00eaff;
   text-align:center;
   font-size:25px;
@@ -172,7 +183,7 @@ canvas{
   transform:translate(-50%,-50%) scale(1);
 }
 
-/* START / GAME OVER */
+/* PANELS */
 
 .panel{
   position:absolute;
@@ -181,7 +192,7 @@ canvas{
   display:flex;
   justify-content:center;
   align-items:center;
-  background:rgba(0,2,10,.84);
+  background:rgba(0,2,10,.86);
 }
 
 .card{
@@ -191,11 +202,8 @@ canvas{
   text-align:center;
   border:1px solid rgba(0,230,255,.65);
   border-radius:22px;
-  background:
-    linear-gradient(145deg,rgba(8,20,45,.98),rgba(2,6,20,.98));
-  box-shadow:
-    0 0 25px rgba(0,220,255,.3),
-    inset 0 0 30px rgba(0,100,255,.08);
+  background:linear-gradient(145deg,#08142d,#020614);
+  box-shadow:0 0 25px rgba(0,220,255,.3);
 }
 
 .logo{
@@ -242,11 +250,6 @@ input{
   color:white;
   font-size:16px;
   font-weight:bold;
-  box-shadow:0 0 18px rgba(0,220,255,.4);
-}
-
-.mainBtn:active{
-  transform:scale(.97);
 }
 
 /* CONTROLS */
@@ -255,32 +258,30 @@ input{
   position:absolute;
   left:0;
   right:0;
-  bottom:150px;
+  bottom:145px;
   z-index:40;
   display:flex;
   justify-content:center;
   align-items:center;
-  gap:10px;
-  padding:0 8px;
+  gap:9px;
+  padding:0 7px;
 }
 
 .control{
-  width:57px;
-  height:57px;
+  width:56px;
+  height:56px;
   border-radius:50%;
   border:1px solid rgba(100,240,255,.75);
-  background:rgba(5,20,45,.82);
-  color:#fff;
+  background:rgba(5,20,45,.85);
+  color:white;
   font-weight:bold;
-  font-size:10px;
+  font-size:9px;
   box-shadow:0 0 13px rgba(0,220,255,.25);
-  user-select:none;
 }
 
 .control.big{
   width:64px;
   height:64px;
-  background:rgba(10,45,75,.9);
 }
 
 .control.missile{
@@ -295,19 +296,18 @@ input{
 
 .control:active{
   transform:scale(.9);
-  box-shadow:0 0 25px rgba(0,240,255,.7);
 }
 
-/* AD SPACE */
+/* AD */
 
 #adSpace{
   position:absolute;
-  bottom:82px;
+  bottom:76px;
   left:50%;
   transform:translateX(-50%);
   width:90%;
   max-width:360px;
-  height:45px;
+  height:42px;
   z-index:25;
   display:flex;
   justify-content:center;
@@ -315,15 +315,14 @@ input{
   border:1px dashed rgba(160,180,200,.35);
   color:#6e7f90;
   font-size:10px;
-  background:rgba(3,7,15,.55);
 }
 
-/* BOSS BAR */
+/* BOSS */
 
 #bossWrap{
   display:none;
   position:absolute;
-  top:142px;
+  top:158px;
   left:10%;
   right:10%;
   z-index:30;
@@ -338,10 +337,7 @@ input{
   width:100%;
   height:100%;
   background:linear-gradient(90deg,#ff153d,#ff8a00);
-  box-shadow:0 0 14px #ff274b;
 }
-
-/* FLASH */
 
 #flash{
   position:absolute;
@@ -358,13 +354,10 @@ input{
   z-index:15;
   pointer-events:none;
   border:0 solid rgba(255,0,0,.7);
-  transition:.1s;
 }
 
-/* HIDE */
-
 .hidden{
-  display:none !important;
+  display:none!important;
 }
 </style>
 </head>
@@ -377,6 +370,8 @@ input{
 
 <div id="flash"></div>
 <div id="danger"></div>
+
+<!-- HUD -->
 
 <div id="hud">
 
@@ -400,11 +395,6 @@ input{
     <span id="time" class="hudValue">5:00</span>
   </div>
 
-  <div id="targetBox" class="hudBox">
-    TARGET
-    <span id="target" class="hudValue">10</span>
-  </div>
-
 </div>
 
 <div id="energyWrap">
@@ -413,11 +403,29 @@ input{
 
 <div id="playerName">MS-MS ROBOT</div>
 
+<!-- =========================
+     TARGET — CLEARLY VISIBLE
+     ========================= -->
+
 <div id="mission">
-  <div id="missionTitle">MISSION TARGET</div>
-  <div id="missionTarget">
-    KILLS: <span id="kills">0</span> / <span id="target2">10</span>
+
+  <div id="missionTitle">
+    🎯 CURRENT MISSION TARGET
   </div>
+
+  <div id="missionTarget">
+    TARGET:
+    <span id="target2">10</span>
+    ENEMIES
+  </div>
+
+  <div id="missionKills">
+    KILLS:
+    <span id="kills">0</span>
+    /
+    <span id="target3">10</span>
+  </div>
+
 </div>
 
 <div id="bossWrap">
@@ -425,28 +433,36 @@ input{
 </div>
 
 <div id="levelMessage">
-  LEVEL <span id="levelMsgNum">2</span><br>
+  LEVEL <span id="levelMsgNum">2</span>
+  <br>
   <small style="font-size:12px;color:#ffe85b">
-    TARGET UPDATED
+    NEW TARGET
   </small>
 </div>
 
+<!-- CONTROLS -->
+
 <div id="controls">
 
-  <button class="control"
-          id="leftBtn">◀<br>MOVE</button>
+  <button class="control" id="leftBtn">
+    ◀<br>MOVE
+  </button>
 
-  <button class="control missile"
-          id="missileBtn">🚀<br>MISSILE</button>
+  <button class="control missile" id="missileBtn">
+    🚀<br>MISSILE
+  </button>
 
-  <button class="control big"
-          id="fireBtn">⚡<br>FIRE</button>
+  <button class="control big" id="fireBtn">
+    ⚡<br>FIRE
+  </button>
 
-  <button class="control bomb"
-          id="bombBtn">💣<br>BOMB</button>
+  <button class="control bomb" id="bombBtn">
+    💣<br>BOMB
+  </button>
 
-  <button class="control"
-          id="rightBtn">▶<br>MOVE</button>
+  <button class="control" id="rightBtn">
+    ▶<br>MOVE
+  </button>
 
 </div>
 
@@ -460,9 +476,13 @@ input{
 
   <div class="card">
 
-    <div class="logo">MS-MS ROBOT</div>
+    <div class="logo">
+      MS-MS ROBOT
+    </div>
 
-    <div class="sub">CORE BREAKER</div>
+    <div class="sub">
+      CORE BREAKER
+    </div>
 
     <p>
       FUTURISTIC AI ROBOT BATTLE<br>
@@ -504,7 +524,7 @@ input{
       SCORE:
       <b id="finalScore">0</b>
       <br><br>
-      RETRY WILL START FROM LEVEL 1
+      RETRY STARTS FROM LEVEL 1
     </p>
 
     <button class="mainBtn" id="retryBtn">
@@ -518,78 +538,92 @@ input{
 </div>
 
 <script>
-/* =========================================================
-   MS-MS ROBOT • CORE BREAKER
-   FINAL SINGLE FILE VERSION
-   ========================================================= */
 
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+const canvas=document.getElementById("canvas");
+const ctx=canvas.getContext("2d");
 
-let W = 0;
-let H = 0;
+let W=0;
+let H=0;
 
 function resize(){
-  W = canvas.width = window.innerWidth * devicePixelRatio;
-  H = canvas.height = window.innerHeight * devicePixelRatio;
 
-  canvas.style.width = window.innerWidth + "px";
-  canvas.style.height = window.innerHeight + "px";
+  W=canvas.width=window.innerWidth*devicePixelRatio;
+  H=canvas.height=window.innerHeight*devicePixelRatio;
 
-  ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+  canvas.style.width=window.innerWidth+"px";
+  canvas.style.height=window.innerHeight+"px";
+
+  ctx.setTransform(
+    devicePixelRatio,0,0,devicePixelRatio,0,0
+  );
 
   if(robot){
-    robot.x = Math.max(
+    robot.x=Math.max(
       35,
       Math.min(window.innerWidth-35,robot.x)
     );
 
-    robot.y = window.innerHeight - 185;
+    robot.y=window.innerHeight-180;
   }
 }
 
 window.addEventListener("resize",resize);
 
-/* =========================================================
-   AUDIO
-   ========================================================= */
+/* AUDIO */
 
-let audioCtx = null;
+let audioCtx=null;
 
 function initAudio(){
+
   if(!audioCtx){
+
     try{
-      audioCtx = new (window.AudioContext ||
-                       window.webkitAudioContext)();
+
+      audioCtx=new(
+        window.AudioContext ||
+        window.webkitAudioContext
+      )();
+
     }catch(e){}
   }
 
-  if(audioCtx && audioCtx.state === "suspended"){
+  if(audioCtx &&
+     audioCtx.state==="suspended"){
+
     audioCtx.resume();
   }
 }
 
 function tone(freq,duration,type="sine",volume=.05){
-  if(!audioCtx) return;
+
+  if(!audioCtx)return;
 
   try{
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
 
-    osc.type = type;
-    osc.frequency.value = freq;
+    const osc=audioCtx.createOscillator();
+    const gain=audioCtx.createGain();
 
-    gain.gain.setValueAtTime(volume,audioCtx.currentTime);
+    osc.type=type;
+    osc.frequency.value=freq;
+
+    gain.gain.setValueAtTime(
+      volume,
+      audioCtx.currentTime
+    );
+
     gain.gain.exponentialRampToValueAtTime(
       .001,
-      audioCtx.currentTime + duration
+      audioCtx.currentTime+duration
     );
 
     osc.connect(gain);
     gain.connect(audioCtx.destination);
 
     osc.start();
-    osc.stop(audioCtx.currentTime + duration);
+    osc.stop(
+      audioCtx.currentTime+duration
+    );
+
   }catch(e){}
 }
 
@@ -611,130 +645,164 @@ function hitSound(){
 
 function crystalSound(){
   tone(880,.12,"sine",.05);
-  setTimeout(()=>tone(1200,.1,"sine",.04),70);
+  setTimeout(()=>{
+    tone(1200,.1,"sine",.04);
+  },70);
 }
 
 function levelSound(){
+
   tone(400,.12,"square",.05);
-  setTimeout(()=>tone(650,.12,"square",.05),100);
-  setTimeout(()=>tone(900,.2,"square",.06),200);
+
+  setTimeout(()=>{
+    tone(650,.12,"square",.05);
+  },100);
+
+  setTimeout(()=>{
+    tone(900,.2,"square",.06);
+  },200);
 }
 
 function bossSound(){
   tone(90,.4,"sawtooth",.08);
-  setTimeout(()=>tone(55,.4,"sawtooth",.06),200);
+
+  setTimeout(()=>{
+    tone(55,.4,"sawtooth",.06);
+  },200);
 }
 
 function winSound(){
+
   tone(500,.1,"sine",.05);
-  setTimeout(()=>tone(700,.1,"sine",.05),120);
-  setTimeout(()=>tone(1000,.25,"sine",.07),240);
+
+  setTimeout(()=>{
+    tone(700,.1,"sine",.05);
+  },120);
+
+  setTimeout(()=>{
+    tone(1000,.25,"sine",.07);
+  },240);
 }
 
 function gameOverSound(){
+
   tone(180,.25,"sawtooth",.06);
-  setTimeout(()=>tone(100,.4,"sawtooth",.06),220);
+
+  setTimeout(()=>{
+    tone(100,.4,"sawtooth",.06);
+  },220);
 }
 
-/* =========================================================
-   GAME VARIABLES
-   ========================================================= */
+/* GAME */
 
-let running = false;
+let running=false;
 
-let level = 1;
-let score = 0;
-let levelKills = 0;
+let level=1;
+let score=0;
+let levelKills=0;
 
-let targetKills = 10;
+let targetKills=10;
 
-let timeLeft = 300;
-let timerInterval = null;
+let timeLeft=300;
 
-let energy = 100;
+let timerInterval=null;
 
-let bombs = 3;
-let missiles = 5;
+let energy=100;
 
-let shootCooldown = 0;
+let bombs=3;
+let missiles=5;
 
-let enemyTimer = 0;
-let crystalTimer = 0;
+let shootCooldown=0;
 
-let boss = null;
+let enemyTimer=0;
+let crystalTimer=0;
 
-let powerMode = false;
-let powerTimer = 0;
+let boss=null;
 
-let levelChanging = false;
+let powerMode=false;
+let powerTimer=0;
 
-let stars = [];
-let enemies = [];
-let shots = [];
-let crystals = [];
-let particles = [];
+let levelChanging=false;
 
-let leftPressed = false;
-let rightPressed = false;
+let stars=[];
+let enemies=[];
+let shots=[];
+let crystals=[];
+let particles=[];
 
-const robot = {
-  x: window.innerWidth/2,
-  y: window.innerHeight-185,
-  size: 42,
-  speed: 7
+let leftPressed=false;
+let rightPressed=false;
+
+const robot={
+  x:window.innerWidth/2,
+  y:window.innerHeight-180,
+  size:42,
+  speed:7
 };
 
-/* =========================================================
-   LEVEL SYSTEM
-   ========================================================= */
+/* LEVEL TARGET */
 
 function getTargetForLevel(lvl){
+
   return Math.min(
     100,
-    10 + ((lvl-1) * 5)
+    10+(lvl-1)*5
   );
 }
 
 function getDifficulty(){
+
   return {
+
     enemySpeed:
-      Math.min(5.5,1.6 + level*0.12),
+      Math.min(
+        5.5,
+        1.6+level*.12
+      ),
 
     spawnRate:
-      Math.max(18,55 - level*1.2),
+      Math.max(
+        18,
+        55-level*1.2
+      ),
 
     hp:
-      Math.min(4,1 + Math.floor(level/7))
+      Math.min(
+        4,
+        1+Math.floor(level/7)
+      )
   };
 }
 
+/* RESET LEVEL */
+
 function resetLevelValues(){
-  targetKills = getTargetForLevel(level);
 
-  levelKills = 0;
+  targetKills=getTargetForLevel(level);
 
-  timeLeft = 300;
+  levelKills=0;
 
-  energy = 100;
+  timeLeft=300;
 
-  boss = null;
+  energy=100;
 
-  enemies = [];
-  shots = [];
-  crystals = [];
-  particles = [];
+  boss=null;
 
-  powerMode = false;
-  powerTimer = 0;
+  enemies=[];
+  shots=[];
+  crystals=[];
+  particles=[];
 
-  document.getElementById("bossWrap").style.display="none";
+  powerMode=false;
+  powerTimer=0;
+
+  document.getElementById("bossWrap")
+    .style.display="none";
 
   updateHUD();
 }
 
-/* =========================================================
-   START GAME
-   ========================================================= */
+/* START */
 
 function startGame(startLevel=1){
 
@@ -742,17 +810,20 @@ function startGame(startLevel=1){
 
   clearInterval(timerInterval);
 
-  level = startLevel;
-  score = 0;
+  /* ALWAYS START EXACTLY FROM GIVEN LEVEL */
 
-  bombs = 3;
-  missiles = 5;
+  level=startLevel;
 
-  levelChanging = false;
+  score=0;
+
+  bombs=3;
+  missiles=5;
+
+  levelChanging=false;
 
   resetLevelValues();
 
-  running = true;
+  running=true;
 
   document.getElementById("startPanel")
     .classList.add("hidden");
@@ -760,97 +831,84 @@ function startGame(startLevel=1){
   document.getElementById("gameOverPanel")
     .classList.add("hidden");
 
-  robot.x = window.innerWidth/2;
-  robot.y = window.innerHeight-185;
+  robot.x=window.innerWidth/2;
+  robot.y=window.innerHeight-180;
 
   levelSound();
 
   startTimer();
-
-  /* BOSS LEVEL */
-  if(level % 5 === 0){
-    setTimeout(()=>{
-      if(running && level % 5 === 0){
-        spawnBoss();
-      }
-    },700);
-  }
 }
 
-/* =========================================================
-   TIMER
-   ========================================================= */
+/* TIMER */
 
 function startTimer(){
 
   clearInterval(timerInterval);
 
-  timerInterval = setInterval(()=>{
+  timerInterval=setInterval(()=>{
 
-    if(!running) return;
+    if(!running)return;
 
     timeLeft--;
 
     updateHUD();
 
-    if(timeLeft <= 0){
+    if(timeLeft<=0){
 
-      if(levelKills < targetKills){
+      if(levelKills<targetKills){
+
         endGame();
+
       }else{
+
         checkTarget();
       }
-
     }
 
   },1000);
 }
 
-/* =========================================================
-   TARGET CHECK
-   ========================================================= */
+/* TARGET CHECK */
 
 function checkTarget(){
 
-  if(!running || levelChanging) return;
+  if(!running || levelChanging)return;
 
-  if(levelKills >= targetKills){
+  if(levelKills>=targetKills){
 
-    levelChanging = true;
+    levelChanging=true;
 
     nextLevel();
   }
 }
 
-/* =========================================================
-   NEXT LEVEL
-   ========================================================= */
+/* NEXT LEVEL */
 
 function nextLevel(){
 
-  if(!running) return;
+  if(!running)return;
 
   level++;
 
-  score += 100;
+  score+=100;
 
-  levelKills = 0;
+  levelKills=0;
 
-  targetKills = getTargetForLevel(level);
+  targetKills=getTargetForLevel(level);
 
-  timeLeft = 300;
+  timeLeft=300;
 
-  energy = 100;
+  energy=100;
 
-  enemies = [];
-  shots = [];
-  crystals = [];
-  particles = [];
+  enemies=[];
+  shots=[];
+  crystals=[];
+  particles=[];
 
-  boss = null;
+  boss=null;
 
-  powerMode = false;
-  powerTimer = 0;
+  powerMode=false;
+  powerTimer=0;
 
   document.getElementById("bossWrap")
     .style.display="none";
@@ -858,166 +916,172 @@ function nextLevel(){
   updateHUD();
 
   document.getElementById("levelMsgNum")
-    .textContent = level;
+    .textContent=level;
 
   document.getElementById("levelMessage")
     .classList.add("show");
 
   setTimeout(()=>{
+
     document.getElementById("levelMessage")
       .classList.remove("show");
+
   },1300);
 
   levelSound();
 
-  if(level % 5 === 0){
+  if(level%5===0){
 
     setTimeout(()=>{
+
       if(running){
         spawnBoss();
       }
-    },900);
 
+    },900);
   }
 
   setTimeout(()=>{
-    levelChanging = false;
+
+    levelChanging=false;
+
   },1000);
 }
 
-/* =========================================================
-   GAME OVER
-   ========================================================= */
+/* GAME OVER */
 
 function endGame(){
 
-  if(!running) return;
+  if(!running)return;
 
-  running = false;
+  running=false;
 
   clearInterval(timerInterval);
 
   gameOverSound();
 
   document.getElementById("finalLevel")
-    .textContent = level;
+    .textContent=level;
 
   document.getElementById("finalScore")
-    .textContent = score;
+    .textContent=score;
 
   document.getElementById("gameOverPanel")
     .classList.remove("hidden");
 }
 
-/* =========================================================
-   HUD
-   ========================================================= */
+/* HUD */
 
 function updateHUD(){
 
   document.getElementById("level")
-    .textContent = level;
+    .textContent=level;
 
   document.getElementById("score")
-    .textContent = score;
+    .textContent=score;
 
-  document.getElementById("target")
-    .textContent = targetKills;
+  /* TARGET */
 
   document.getElementById("target2")
-    .textContent = targetKills;
+    .textContent=targetKills;
+
+  document.getElementById("target3")
+    .textContent=targetKills;
+
+  /* KILLS */
 
   document.getElementById("kills")
-    .textContent = levelKills;
+    .textContent=levelKills;
 
-  let min = Math.floor(timeLeft/60);
-  let sec = timeLeft%60;
+  let min=Math.floor(timeLeft/60);
+  let sec=timeLeft%60;
 
   document.getElementById("time")
-    .textContent =
-    min + ":" + String(sec).padStart(2,"0");
+    .textContent=
+    min+":"+String(sec).padStart(2,"0");
 
   document.getElementById("energyBar")
-    .style.width =
-    Math.max(0,energy) + "%";
+    .style.width=
+    Math.max(0,energy)+"%";
 
-  document.getElementById("energyBar")
-    .style.background =
-      energy <= 25
-      ? "linear-gradient(90deg,#ff173f,#ff8b00)"
-      : "linear-gradient(90deg,#00eaff,#00ff88)";
+  if(energy<=25){
 
-  if(energy <= 25){
+    document.getElementById("energyBar")
+      .style.background=
+      "linear-gradient(90deg,#ff173f,#ff8b00)";
+
     document.getElementById("danger")
-      .style.borderWidth = "5px";
+      .style.borderWidth="5px";
+
   }else{
+
+    document.getElementById("energyBar")
+      .style.background=
+      "linear-gradient(90deg,#00eaff,#00ff88)";
+
     document.getElementById("danger")
-      .style.borderWidth = "0";
+      .style.borderWidth="0";
   }
 }
 
-/* =========================================================
-   STARS
-   ========================================================= */
+/* STARS */
 
 function createStars(){
 
-  stars = [];
+  stars=[];
 
   for(let i=0;i<90;i++){
 
     stars.push({
-      x:Math.random()*window.innerWidth,
-      y:Math.random()*window.innerHeight,
-      size:Math.random()*2+0.5,
-      speed:Math.random()*1.5+0.2
-    });
 
+      x:Math.random()*window.innerWidth,
+
+      y:Math.random()*window.innerHeight,
+
+      size:Math.random()*2+.5,
+
+      speed:Math.random()*1.5+.2
+    });
   }
 }
 
-/* =========================================================
-   PLAYER
-   ========================================================= */
+/* ROBOT */
 
 function drawRobot(){
 
-  const x = robot.x;
-  const y = robot.y;
+  const x=robot.x;
+  const y=robot.y;
 
   ctx.save();
 
-  /* glow */
+  ctx.shadowBlur=22;
+  ctx.shadowColor=
+    powerMode?"#ffe600":"#00eaff";
 
-  ctx.shadowBlur = 22;
-  ctx.shadowColor =
-    powerMode ? "#ffe600" : "#00eaff";
+  ctx.fillStyle=
+    powerMode?"#fff200":"#19cfff";
 
-  /* body */
-
-  ctx.fillStyle =
-    powerMode ? "#fff200" : "#19cfff";
-
-  ctx.strokeStyle = "#bffaff";
-  ctx.lineWidth = 2;
+  ctx.strokeStyle="#bffaff";
+  ctx.lineWidth=2;
 
   ctx.beginPath();
+
   ctx.moveTo(x-18,y-28);
   ctx.lineTo(x+18,y-28);
   ctx.lineTo(x+23,y+18);
   ctx.lineTo(x+10,y+30);
   ctx.lineTo(x-10,y+30);
   ctx.lineTo(x-23,y+18);
+
   ctx.closePath();
 
   ctx.fill();
   ctx.stroke();
 
-  /* head */
-
   ctx.fillStyle="#07101f";
 
   ctx.beginPath();
+
   ctx.roundRect(
     x-18,
     y-45,
@@ -1029,28 +1093,26 @@ function drawRobot(){
   ctx.fill();
   ctx.stroke();
 
-  /* eyes */
-
   ctx.fillStyle=
-    powerMode ? "#fff" : "#00ffff";
+    powerMode?"#fff":"#00ffff";
 
   ctx.fillRect(x-11,y-37,7,4);
   ctx.fillRect(x+4,y-37,7,4);
 
-  /* reactor */
-
   ctx.beginPath();
-  ctx.arc(x,y+4,6,0,Math.PI*2);
-  ctx.fillStyle=
-    powerMode ? "#fff" : "#00ffff";
-  ctx.fill();
 
-  /* wings */
+  ctx.arc(x,y+4,6,0,Math.PI*2);
+
+  ctx.fillStyle=
+    powerMode?"#fff":"#00ffff";
+
+  ctx.fill();
 
   ctx.strokeStyle="#4df2ff";
   ctx.lineWidth=3;
 
   ctx.beginPath();
+
   ctx.moveTo(x-20,y-2);
   ctx.lineTo(x-34,y+13);
   ctx.lineTo(x-22,y+10);
@@ -1060,8 +1122,6 @@ function drawRobot(){
   ctx.lineTo(x+22,y+10);
 
   ctx.stroke();
-
-  /* legs */
 
   ctx.strokeStyle="#79eaff";
   ctx.lineWidth=5;
@@ -1079,21 +1139,20 @@ function drawRobot(){
   ctx.restore();
 }
 
-/* =========================================================
-   SHOOT
-   ========================================================= */
+/* SHOOT */
 
 function shoot(){
 
-  if(!running) return;
+  if(!running)return;
 
-  if(shootCooldown > 0) return;
+  if(shootCooldown>0)return;
 
-  shootCooldown = 10;
+  shootCooldown=10;
 
   fireSound();
 
   shots.push({
+
     x:robot.x,
     y:robot.y-48,
     vy:-11,
@@ -1121,21 +1180,20 @@ function shoot(){
   }
 }
 
-/* =========================================================
-   MISSILE
-   ========================================================= */
+/* MISSILE */
 
 function missile(){
 
-  if(!running) return;
+  if(!running)return;
 
-  if(missiles <= 0) return;
+  if(missiles<=0)return;
 
   missiles--;
 
   missileSound();
 
   shots.push({
+
     x:robot.x,
     y:robot.y-50,
     vy:-8,
@@ -1144,15 +1202,13 @@ function missile(){
   });
 }
 
-/* =========================================================
-   BOMB
-   ========================================================= */
+/* BOMB */
 
 function bomb(){
 
-  if(!running) return;
+  if(!running)return;
 
-  if(bombs <= 0) return;
+  if(bombs<=0)return;
 
   bombs--;
 
@@ -1165,13 +1221,13 @@ function bomb(){
 
   if(boss){
 
-    boss.hp -= 12;
+    boss.hp-=12;
 
-    boss.hp = Math.max(0,boss.hp);
+    boss.hp=Math.max(0,boss.hp);
 
     updateBossBar();
 
-    if(boss.hp <= 0){
+    if(boss.hp<=0){
       destroyBoss();
     }
   }
@@ -1183,16 +1239,14 @@ function bomb(){
   );
 }
 
-/* =========================================================
-   ULTIMATE
-   ========================================================= */
+/* ULTIMATE */
 
 function ultimateBlast(){
 
-  if(!running) return;
+  if(!running)return;
 
-  powerMode = false;
-  powerTimer = 0;
+  powerMode=false;
+  powerTimer=0;
 
   createExplosion(
     robot.x,
@@ -1207,13 +1261,13 @@ function ultimateBlast(){
 
   if(boss){
 
-    boss.hp -= 25;
+    boss.hp-=25;
 
-    boss.hp = Math.max(0,boss.hp);
+    boss.hp=Math.max(0,boss.hp);
 
     updateBossBar();
 
-    if(boss.hp <= 0){
+    if(boss.hp<=0){
       destroyBoss();
     }
   }
@@ -1221,24 +1275,25 @@ function ultimateBlast(){
   winSound();
 }
 
-/* =========================================================
-   ENEMIES
-   ========================================================= */
+/* ENEMY */
 
 function spawnEnemy(){
 
-  const d = getDifficulty();
+  const d=getDifficulty();
 
   enemies.push({
 
-    x:25+Math.random()*(window.innerWidth-50),
+    x:25+
+      Math.random()*
+      (window.innerWidth-50),
 
     y:-35,
 
-    size:18+Math.random()*7,
+    size:18+
+      Math.random()*7,
 
     speed:
-      d.enemySpeed +
+      d.enemySpeed+
       Math.random()*1.5,
 
     hp:d.hp,
@@ -1247,58 +1302,64 @@ function spawnEnemy(){
 
     type:
       Math.random()<.15
-      ? "heavy"
-      : "drone"
+      ?"heavy"
+      :"drone"
   });
 }
 
 function destroyEnemy(index,giveScore=true){
 
-  if(index<0 || index>=enemies.length) return;
+  if(index<0 ||
+     index>=enemies.length)return;
 
-  const e = enemies[index];
+  const e=enemies[index];
 
-  createExplosion(e.x,e.y,15);
+  createExplosion(
+    e.x,
+    e.y,
+    15
+  );
 
   enemies.splice(index,1);
 
   if(giveScore){
 
-    score += 10;
+    score+=10;
 
     levelKills++;
 
     hitSound();
 
+    /* IMPORTANT:
+       TARGET COMPLETE = NEXT LEVEL */
+
     checkTarget();
   }
 }
 
-/* =========================================================
-   BOSS
-   ========================================================= */
+/* BOSS */
 
 function spawnBoss(){
 
-  if(!running) return;
+  if(!running)return;
 
-  boss = {
+  boss={
 
     x:window.innerWidth/2,
 
-    y:165,
+    y:185,
 
     width:115,
 
     height:60,
 
-    hp:18 + level*6,
+    hp:18+level*6,
 
-    maxHp:18 + level*6,
+    maxHp:18+level*6,
 
     dir:1,
 
-    speed:1.3 + level*.04
+    speed:1.3+level*.04
   };
 
   document.getElementById("bossWrap")
@@ -1311,16 +1372,36 @@ function spawnBoss(){
 
 function updateBossBar(){
 
-  if(!boss) return;
+  if(!boss)return;
 
   document.getElementById("bossBar")
-    .style.width =
-      (boss.hp/boss.maxHp*100) + "%";
+    .style.width=
+    (boss.hp/boss.maxHp*100)+"%";
+}
+
+function destroyBoss(){
+
+  if(!boss)return;
+
+  createExplosion(
+    boss.x,
+    boss.y,
+    100
+  );
+
+  score+=500;
+
+  boss=null;
+
+  document.getElementById("bossWrap")
+    .style.display="none";
+
+  winSound();
 }
 
 function drawBoss(){
 
-  if(!boss) return;
+  if(!boss)return;
 
   ctx.save();
 
@@ -1344,11 +1425,10 @@ function drawBoss(){
   ctx.fill();
   ctx.stroke();
 
-  /* core */
-
   ctx.fillStyle="#ff174f";
 
   ctx.beginPath();
+
   ctx.arc(
     boss.x,
     boss.y,
@@ -1373,67 +1453,18 @@ function drawBoss(){
 
   ctx.fill();
 
-  /* wings */
-
-  ctx.strokeStyle="#ff5578";
-  ctx.lineWidth=6;
-
-  ctx.beginPath();
-
-  ctx.moveTo(
-    boss.x-boss.width/2,
-    boss.y
-  );
-
-  ctx.lineTo(
-    boss.x-boss.width/2-30,
-    boss.y+20
-  );
-
-  ctx.moveTo(
-    boss.x+boss.width/2,
-    boss.y
-  );
-
-  ctx.lineTo(
-    boss.x+boss.width/2+30,
-    boss.y+20
-  );
-
-  ctx.stroke();
-
   ctx.restore();
 }
 
-function destroyBoss(){
-
-  if(!boss) return;
-
-  createExplosion(
-    boss.x,
-    boss.y,
-    100
-  );
-
-  score += 500;
-
-  boss = null;
-
-  document.getElementById("bossWrap")
-    .style.display="none";
-
-  winSound();
-}
-
-/* =========================================================
-   CRYSTALS
-   ========================================================= */
+/* CRYSTAL */
 
 function spawnCrystal(){
 
   crystals.push({
 
-    x:25+Math.random()*(window.innerWidth-50),
+    x:25+
+      Math.random()*
+      (window.innerWidth-50),
 
     y:-20,
 
@@ -1466,19 +1497,19 @@ function drawCrystal(c){
   ctx.restore();
 }
 
-/* =========================================================
-   EXPLOSION
-   ========================================================= */
+/* EXPLOSION */
 
 function createExplosion(x,y,power){
 
-  for(let i=0;i<Math.min(35,power);i++){
+  for(
+    let i=0;
+    i<Math.min(35,power);
+    i++
+  ){
 
-    const a =
-      Math.random()*Math.PI*2;
+    const a=Math.random()*Math.PI*2;
 
-    const s =
-      Math.random()*5+1;
+    const s=Math.random()*5+1;
 
     particles.push({
 
@@ -1494,13 +1525,7 @@ function createExplosion(x,y,power){
     });
   }
 
-  flashScreen();
-}
-
-function flashScreen(){
-
-  const f =
-    document.getElementById("flash");
+  const f=document.getElementById("flash");
 
   f.style.opacity=".35";
 
@@ -1509,61 +1534,51 @@ function flashScreen(){
   },70);
 }
 
-/* =========================================================
-   UPDATE
-   ========================================================= */
+/* UPDATE */
 
 function update(){
 
-  if(!running) return;
+  if(!running)return;
 
   if(leftPressed){
-    robot.x -= robot.speed;
+    robot.x-=robot.speed;
   }
 
   if(rightPressed){
-    robot.x += robot.speed;
+    robot.x+=robot.speed;
   }
 
-  robot.x =
-    Math.max(
-      30,
-      Math.min(
-        window.innerWidth-30,
-        robot.x
-      )
-    );
+  robot.x=Math.max(
+    30,
+    Math.min(
+      window.innerWidth-30,
+      robot.x
+    )
+  );
 
   if(shootCooldown>0){
     shootCooldown--;
   }
 
-  /* power mode */
-
   if(powerMode){
 
-    powerTimer += 1/60;
+    powerTimer+=1/60;
 
     if(powerTimer>=7.8){
-
       ultimateBlast();
     }
   }
 
-  /* enemy spawn */
-
   enemyTimer++;
 
-  const d = getDifficulty();
+  const d=getDifficulty();
 
-  if(enemyTimer >= d.spawnRate){
+  if(enemyTimer>=d.spawnRate){
 
     enemyTimer=0;
 
     spawnEnemy();
   }
-
-  /* crystal */
 
   crystalTimer++;
 
@@ -1574,13 +1589,13 @@ function update(){
     spawnCrystal();
   }
 
-  /* shots */
+  /* SHOTS */
 
   for(let i=shots.length-1;i>=0;i--){
 
     const s=shots[i];
 
-    s.y += s.vy;
+    s.y+=s.vy;
 
     if(s.y<-50){
 
@@ -1589,23 +1604,24 @@ function update(){
       continue;
     }
 
-    /* enemy collision */
-
     let hit=false;
 
-    for(let j=enemies.length-1;j>=0;j--){
+    for(
+      let j=enemies.length-1;
+      j>=0;
+      j--
+    ){
 
       const e=enemies[j];
 
-      const dist =
-        Math.hypot(
-          s.x-e.x,
-          s.y-e.y
-        );
+      const dist=Math.hypot(
+        s.x-e.x,
+        s.y-e.y
+      );
 
-      if(dist < e.size+8){
+      if(dist<e.size+8){
 
-        e.hp -= s.damage;
+        e.hp-=s.damage;
 
         shots.splice(i,1);
 
@@ -1626,24 +1642,18 @@ function update(){
       }
     }
 
-    if(hit) continue;
-
-    /* boss collision */
+    if(hit)continue;
 
     if(boss){
 
       if(
-        s.x >
-          boss.x-boss.width/2 &&
-        s.x <
-          boss.x+boss.width/2 &&
-        s.y >
-          boss.y-boss.height/2 &&
-        s.y <
-          boss.y+boss.height/2
+        s.x>boss.x-boss.width/2 &&
+        s.x<boss.x+boss.width/2 &&
+        s.y>boss.y-boss.height/2 &&
+        s.y<boss.y+boss.height/2
       ){
 
-        boss.hp -= s.damage;
+        boss.hp-=s.damage;
 
         shots.splice(i,1);
 
@@ -1658,23 +1668,29 @@ function update(){
     }
   }
 
-  /* enemies */
+  /* ENEMIES */
 
-  for(let i=enemies.length-1;i>=0;i--){
+  for(
+    let i=enemies.length-1;
+    i>=0;
+    i--
+  ){
 
     const e=enemies[i];
 
-    e.y += e.speed;
+    e.y+=e.speed;
 
-    const dist =
-      Math.hypot(
-        e.x-robot.x,
-        e.y-robot.y
-      );
+    const dist=Math.hypot(
+      e.x-robot.x,
+      e.y-robot.y
+    );
 
-    if(dist < e.size+25){
+    if(dist<e.size+25){
 
-      energy -= e.type==="heavy" ? 18 : 10;
+      energy-=
+        e.type==="heavy"
+        ?18
+        :10;
 
       energy=Math.max(0,energy);
 
@@ -1696,34 +1712,40 @@ function update(){
       continue;
     }
 
-    if(e.y > window.innerHeight+60){
+    if(
+      e.y>
+      window.innerHeight+60
+    ){
 
       enemies.splice(i,1);
     }
   }
 
-  /* boss */
+  /* BOSS */
 
   if(boss){
 
-    boss.x += boss.dir*boss.speed;
+    boss.x+=
+      boss.dir*
+      boss.speed;
 
     if(
-      boss.x > window.innerWidth-80 ||
-      boss.x < 80
+      boss.x>
+      window.innerWidth-80 ||
+      boss.x<80
     ){
-      boss.dir *= -1;
+
+      boss.dir*=-1;
     }
 
-    const dist =
-      Math.hypot(
-        boss.x-robot.x,
-        boss.y-robot.y
-      );
+    const dist=Math.hypot(
+      boss.x-robot.x,
+      boss.y-robot.y
+    );
 
-    if(dist < 65){
+    if(dist<65){
 
-      energy -= .12;
+      energy-=.12;
 
       if(energy<=0){
 
@@ -1736,27 +1758,33 @@ function update(){
     }
   }
 
-  /* crystals */
+  /* CRYSTALS */
 
-  for(let i=crystals.length-1;i>=0;i--){
+  for(
+    let i=crystals.length-1;
+    i>=0;
+    i--
+  ){
 
     const c=crystals[i];
 
-    c.y += c.speed;
+    c.y+=c.speed;
 
-    const dist =
-      Math.hypot(
-        c.x-robot.x,
-        c.y-robot.y
-      );
+    const dist=Math.hypot(
+      c.x-robot.x,
+      c.y-robot.y
+    );
 
     if(dist<30){
 
-      energy += 25;
+      energy+=25;
 
-      energy=Math.min(100,energy);
+      energy=Math.min(
+        100,
+        energy
+      );
 
-      score += 5;
+      score+=5;
 
       crystals.splice(i,1);
 
@@ -1767,28 +1795,40 @@ function update(){
         powerMode=true;
         powerTimer=0;
 
-        tone(1100,.25,"sine",.07);
+        tone(
+          1100,
+          .25,
+          "sine",
+          .07
+        );
       }
 
       continue;
     }
 
-    if(c.y>window.innerHeight+30){
+    if(
+      c.y>
+      window.innerHeight+30
+    ){
 
       crystals.splice(i,1);
     }
   }
 
-  /* particles */
+  /* PARTICLES */
 
-  for(let i=particles.length-1;i>=0;i--){
+  for(
+    let i=particles.length-1;
+    i>=0;
+    i--
+  ){
 
     const p=particles[i];
 
-    p.x += p.vx;
-    p.y += p.vy;
+    p.x+=p.vx;
+    p.y+=p.vy;
 
-    p.vy += .05;
+    p.vy+=.05;
 
     p.life--;
 
@@ -1798,24 +1838,26 @@ function update(){
     }
   }
 
-  /* stars */
+  /* STARS */
 
   for(const s of stars){
 
-    s.y += s.speed;
+    s.y+=s.speed;
 
     if(s.y>window.innerHeight){
+
       s.y=0;
-      s.x=Math.random()*window.innerWidth;
+
+      s.x=
+        Math.random()*
+        window.innerWidth;
     }
   }
 
   updateHUD();
 }
 
-/* =========================================================
-   DRAW
-   ========================================================= */
+/* DRAW */
 
 function draw(){
 
@@ -1826,9 +1868,7 @@ function draw(){
     window.innerHeight
   );
 
-  /* background */
-
-  const g =
+  const g=
     ctx.createRadialGradient(
       window.innerWidth/2,
       window.innerHeight/2,
@@ -1850,11 +1890,10 @@ function draw(){
     window.innerHeight
   );
 
-  /* stars */
-
   for(const s of stars){
 
-    ctx.fillStyle="rgba(120,220,255,.7)";
+    ctx.fillStyle=
+      "rgba(120,220,255,.7)";
 
     ctx.fillRect(
       s.x,
@@ -1864,28 +1903,7 @@ function draw(){
     );
   }
 
-  /* grid */
-
-  ctx.strokeStyle="rgba(0,180,255,.06)";
-  ctx.lineWidth=1;
-
-  for(let y=170;y<window.innerHeight;y+=45){
-
-    ctx.beginPath();
-    ctx.moveTo(0,y);
-    ctx.lineTo(window.innerWidth,y);
-    ctx.stroke();
-  }
-
-  for(let x=0;x<window.innerWidth;x+=45){
-
-    ctx.beginPath();
-    ctx.moveTo(x,170);
-    ctx.lineTo(x,window.innerHeight);
-    ctx.stroke();
-  }
-
-  /* shots */
+  /* SHOTS */
 
   for(const s of shots){
 
@@ -1908,10 +1926,14 @@ function draw(){
     }else{
 
       ctx.shadowColor=
-        powerMode ? "#fff200" : "#00eaff";
+        powerMode
+        ?" #fff200"
+        :"#00eaff";
 
       ctx.fillStyle=
-        powerMode ? "#fff" : "#00eaff";
+        powerMode
+        ?" #fff"
+        :"#00eaff";
 
       ctx.fillRect(
         s.x-2,
@@ -1924,22 +1946,23 @@ function draw(){
     ctx.restore();
   }
 
-  /* enemies */
+  /* ENEMIES */
 
   for(const e of enemies){
 
     ctx.save();
 
     ctx.shadowBlur=14;
+
     ctx.shadowColor=
       e.type==="heavy"
-      ? "#ff7a00"
-      : "#ff174f";
+      ?" #ff7a00"
+      :"#ff174f";
 
     ctx.fillStyle=
       e.type==="heavy"
-      ? "#ff7a00"
-      : "#ff244f";
+      ?" #ff7a00"
+      :"#ff244f";
 
     ctx.beginPath();
 
@@ -1970,26 +1993,18 @@ function draw(){
     ctx.restore();
   }
 
-  /* crystals */
-
   for(const c of crystals){
 
     drawCrystal(c);
   }
 
-  /* boss */
-
   drawBoss();
-
-  /* robot */
 
   drawRobot();
 
-  /* particles */
-
   for(const p of particles){
 
-    ctx.globalAlpha =
+    ctx.globalAlpha=
       Math.max(0,p.life/50);
 
     ctx.fillStyle="#ffe96a";
@@ -2005,9 +2020,7 @@ function draw(){
   ctx.globalAlpha=1;
 }
 
-/* =========================================================
-   MAIN LOOP
-   ========================================================= */
+/* LOOP */
 
 function loop(){
 
@@ -2018,13 +2031,12 @@ function loop(){
   requestAnimationFrame(loop);
 }
 
-/* =========================================================
-   CONTROLS
-   ========================================================= */
+/* CONTROLS */
 
 function holdButton(button,down,up){
 
-  button.addEventListener("touchstart",
+  button.addEventListener(
+    "touchstart",
     e=>{
       e.preventDefault();
       down();
@@ -2032,7 +2044,8 @@ function holdButton(button,down,up){
     {passive:false}
   );
 
-  button.addEventListener("touchend",
+  button.addEventListener(
+    "touchend",
     e=>{
       e.preventDefault();
       up();
@@ -2040,9 +2053,20 @@ function holdButton(button,down,up){
     {passive:false}
   );
 
-  button.addEventListener("mousedown",down);
-  button.addEventListener("mouseup",up);
-  button.addEventListener("mouseleave",up);
+  button.addEventListener(
+    "mousedown",
+    down
+  );
+
+  button.addEventListener(
+    "mouseup",
+    up
+  );
+
+  button.addEventListener(
+    "mouseleave",
+    up
+  );
 }
 
 holdButton(
@@ -2058,7 +2082,8 @@ holdButton(
 );
 
 document.getElementById("fireBtn")
-.addEventListener("touchstart",
+.addEventListener(
+  "touchstart",
   e=>{
     e.preventDefault();
     initAudio();
@@ -2068,87 +2093,93 @@ document.getElementById("fireBtn")
 );
 
 document.getElementById("fireBtn")
-.addEventListener("click",()=>{
-  initAudio();
-  shoot();
-});
-
-document.getElementById("missileBtn")
-.addEventListener("touchstart",
-  e=>{
-    e.preventDefault();
+.addEventListener(
+  "click",
+  ()=>{
     initAudio();
-    missile();
-  },
-  {passive:false}
-);
-
-document.getElementById("missileBtn")
-.addEventListener("click",()=>{
-  initAudio();
-  missile();
-});
-
-document.getElementById("bombBtn")
-.addEventListener("touchstart",
-  e=>{
-    e.preventDefault();
-    initAudio();
-    bomb();
-  },
-  {passive:false}
-);
-
-document.getElementById("bombBtn")
-.addEventListener("click",()=>{
-  initAudio();
-  bomb();
-});
-
-/* =========================================================
-   KEYBOARD
-   ========================================================= */
-
-window.addEventListener("keydown",e=>{
-
-  if(e.key==="ArrowLeft"){
-    leftPressed=true;
-  }
-
-  if(e.key==="ArrowRight"){
-    rightPressed=true;
-  }
-
-  if(e.key===" "){
     shoot();
   }
+);
 
-  if(e.key.toLowerCase()==="m"){
+document.getElementById("missileBtn")
+.addEventListener(
+  "touchstart",
+  e=>{
+    e.preventDefault();
+    initAudio();
+    missile();
+  },
+  {passive:false}
+);
+
+document.getElementById("missileBtn")
+.addEventListener(
+  "click",
+  ()=>{
+    initAudio();
     missile();
   }
+);
 
-  if(e.key.toLowerCase()==="b"){
+document.getElementById("bombBtn")
+.addEventListener(
+  "touchstart",
+  e=>{
+    e.preventDefault();
+    initAudio();
+    bomb();
+  },
+  {passive:false}
+);
+
+document.getElementById("bombBtn")
+.addEventListener(
+  "click",
+  ()=>{
+    initAudio();
     bomb();
   }
-});
+);
 
-window.addEventListener("keyup",e=>{
+/* KEYBOARD */
 
-  if(e.key==="ArrowLeft"){
-    leftPressed=false;
+window.addEventListener(
+  "keydown",
+  e=>{
+
+    if(e.key==="ArrowLeft")
+      leftPressed=true;
+
+    if(e.key==="ArrowRight")
+      rightPressed=true;
+
+    if(e.key===" ")
+      shoot();
+
+    if(e.key.toLowerCase()==="m")
+      missile();
+
+    if(e.key.toLowerCase()==="b")
+      bomb();
   }
+);
 
-  if(e.key==="ArrowRight"){
-    rightPressed=false;
+window.addEventListener(
+  "keyup",
+  e=>{
+
+    if(e.key==="ArrowLeft")
+      leftPressed=false;
+
+    if(e.key==="ArrowRight")
+      rightPressed=false;
   }
-});
+);
 
-/* =========================================================
-   NAME
-   ========================================================= */
+/* NAME */
 
-const savedName =
-  localStorage.getItem("msms_name") || "";
+const savedName=
+  localStorage.getItem("msms_name")||"";
 
 if(savedName){
 
@@ -2162,53 +2193,54 @@ if(savedName){
     .textContent=savedName;
 }
 
-/* =========================================================
-   START BUTTON
-   ========================================================= */
+/* START */
 
 document.getElementById("startBtn")
-.addEventListener("click",()=>{
+.addEventListener(
+  "click",
+  ()=>{
 
-  initAudio();
+    initAudio();
 
-  let name =
-    document.getElementById("nameInput")
+    let name=
+      document.getElementById("nameInput")
       .value
       .trim();
 
-  if(!name){
-    name="PLAYER";
+    if(!name)
+      name="PLAYER";
+
+    localStorage.setItem(
+      "msms_name",
+      name
+    );
+
+    document.getElementById("hudName")
+      .textContent=name;
+
+    document.getElementById("playerName")
+      .textContent=name;
+
+    /* ALWAYS LEVEL 1 */
+
+    startGame(1);
   }
+);
 
-  localStorage.setItem(
-    "msms_name",
-    name
-  );
-
-  document.getElementById("hudName")
-    .textContent=name;
-
-  document.getElementById("playerName")
-    .textContent=name;
-
-  startGame(1);
-});
-
-/* =========================================================
-   RETRY
-   ========================================================= */
+/* RETRY = LEVEL 1 */
 
 document.getElementById("retryBtn")
-.addEventListener("click",()=>{
+.addEventListener(
+  "click",
+  ()=>{
 
-  initAudio();
+    initAudio();
 
-  startGame(1);
-});
+    startGame(1);
+  }
+);
 
-/* =========================================================
-   INIT
-   ========================================================= */
+/* INIT */
 
 resize();
 
