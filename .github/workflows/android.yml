@@ -1,68 +1,71 @@
 name: Build MS-MS ROBOT Android App
 
 on:
-workflow_dispatch:
-push:
-paths:
-- 'index.html'
-- '.github/workflows/android.yml'
+  workflow_dispatch:
+  push:
+    paths:
+      - 'index.html'
+      - '.github/workflows/android.yml'
 
 jobs:
-build-android:
-runs-on: ubuntu-latest
+  build-android:
+    runs-on: ubuntu-latest
 
-steps:
-  - name: Checkout game
-    uses: actions/checkout@v7
+    steps:
+      - name: Checkout game
+        uses: actions/checkout@v4
 
-  - name: Setup Node.js
-    uses: actions/setup-node@v6
-    with:
-      node-version: 22
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
-  - name: Setup Java
-    uses: actions/setup-java@v6
-    with:
-      distribution: temurin
-      java-version: '21'
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
 
-  - name: Setup Android SDK
-    uses: android-actions/setup-android@v4
-    with:
-      packages: 'platform-tools'
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools'
 
-  - name: Create Capacitor project
-    run: |
-      rm -rf www android
-      mkdir -p www
-      cp index.html www/index.html
+      - name: Create Capacitor project
+        run: |
+          rm -rf www android
+          mkdir -p www
+          cp index.html www/index.html
+          cp manifest.json www/manifest.json
+          cp sw.js www/sw.js
+          cp cyborg.png www/cyborg.png
 
-      cat > package.json <<'EOF'
-      {
-        "name": "ms-ms-robot",
-        "version": "1.0.0",
-        "private": true,
-        "scripts": {
-          "build": "echo Build complete"
-        }
-      }
-      EOF
+          cat > package.json <<'EOF'
+          {
+            "name": "ms-ms-robot",
+            "version": "1.0.0",
+            "private": true,
+            "scripts": {
+              "build": "echo Build complete"
+            }
+          }
+          EOF
 
-      npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
+          npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
 
-      npx cap init "MS-MS ROBOT" "com.nabath2197.msmsrobot" --web-dir www
+          npx cap init "MS-MS ROBOT" "com.nabath2197.msmsrobot" --web-dir www
 
-      npx cap add android
+          npx cap add android
 
-  - name: Build Android App Bundle
-    run: |
-      cd android
-      chmod +x gradlew
-      ./gradlew bundleRelease
+      - name: Build Android App Bundle
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew bundleRelease
 
-  - name: Upload AAB
-    uses: actions/upload-artifact@v4
-    with:
-      name: MS-MS-ROBOT-AAB
-      path: android/app/build/outputs/bundle/release/app-release.aab
-      retention-days: 30
+      - name: Upload AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: MS-MS-ROBOT-AAB
+          path: android/app/build/outputs/bundle/release/app-release.aab
+          retention-days: 30
