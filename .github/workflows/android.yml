@@ -62,6 +62,25 @@ jobs:
 
           npx cap add android
 
+      - name: Set Android minimum SDK
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path("android/variables.gradle")
+          s = p.read_text()
+
+          import re
+
+          s = re.sub(
+              r'minSdkVersion\s*=\s*\d+',
+              'minSdkVersion = 24',
+              s
+          )
+
+          p.write_text(s)
+          PY
+
       - name: Add Google Mobile Ads SDK
         run: |
           python3 - <<'PY'
