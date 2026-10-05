@@ -226,12 +226,12 @@ jobs:
         run: |
           npx cap sync android
 
-      - name: Build Android AAB and APK
+      - name: Build Android AAB and Debug APK
         run: |
           cd android
           chmod +x gradlew
           ./gradlew bundleRelease
-          ./gradlew assembleRelease
+          ./gradlew assembleDebug
           echo "APK files:"
           find . -type f -name "*.apk" -print
 
@@ -242,9 +242,9 @@ jobs:
           path: android/app/build/outputs/bundle/release/app-release.aab
           retention-days: 30
 
-      - name: Upload APK
+      - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: MS-MS-ROBOT-APK
-          path: android/**/build/outputs/apk/release/*.apk
+          name: MS-MS-ROBOT-DEBUG-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
