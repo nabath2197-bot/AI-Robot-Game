@@ -222,7 +222,6 @@ jobs:
               }
           }
           EOF
-
       - name: Sync Capacitor
         run: |
           npx cap sync android
@@ -231,18 +230,8 @@ jobs:
         run: |
           cd android
           chmod +x gradlew
-          ./gradlew bundleRelease assembleRelease
-
-      - name: Upload AAB
-        uses: actions/upload-artifact@v4
-        with:
-        - name: Build Android AAB and APK
-        run: |
-          cd android
-          chmod +x gradlew
           ./gradlew bundleRelease
           ./gradlew assembleRelease
-
           echo "APK files:"
           find . -type f -name "*.apk" -print
 
