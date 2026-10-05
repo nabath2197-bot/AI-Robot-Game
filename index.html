@@ -161,6 +161,7 @@ input{
 <div id="controls">
  <button class="ctrl" id="left">◀</button>
  <button class="ctrl fire" id="fire">🔫</button>
+ <button class="ctrl missile" id="missileBtn">🚀</button>
  <button class="ctrl bomb">💣</button>
  <button class="ctrl" id="right">▶</button>
 </div>
@@ -176,60 +177,131 @@ let W,H;
 function resize(){
  W=c.width=innerWidth;
  H=c.height=innerHeight;
- if(player)player.y=H-225;
+  if(player)player.y=H-225;
 }
+
 addEventListener("resize",resize);
 
 let player={
- x:innerWidth/2,y:innerHeight-225,
- w:42,h:48,speed:6
+ x:innerWidth/2,
+ y:innerHeight-225,
+ w:42,
+ h:48,
+ speed:6
 };
-
-let running=false;
-let level=1;
-let score=0;
-let kills=0;
-let targetKills=10;
-let time=300;
-let power=100;
-
-let left=false,right=false;
-let bullets=[];
-let enemies=[];
-let crystals=[];
-let explosions=[];
-let stars=[];
-
-let spawn=0;
-let crystalSpawn=4;
-let shootWait=0;
-let last=0;
-
-for(let i=0;i<100;i++){
- stars.push({
-  x:Math.random()*innerWidth,
-  y:Math.random()*innerHeight,
-  s:Math.random()*2+.5
- });
-}
-
-resize();
+ 
+/* ===== ADVANCED SOUND SYSTEM ===== */
 
 let audio=null;
 
-function beep(f,d=.1){
+function soundInit(){
  try{
   audio=audio||new(window.AudioContext||window.webkitAudioContext)();
-  let o=audio.createOscillator();
-  let g=audio.createGain();
-  o.frequency.value=f;
-  g.gain.value=.06;
-  o.connect(g);g.connect(audio.destination);
-  o.start();
-  g.gain.exponentialRampToValueAtTime(.001,audio.currentTime+d);
-  o.stop(audio.currentTime+d);
+
+  if(audio.state==="suspended"){
+   audio.resume();
+  }
+
  }catch(e){}
 }
+
+function tone(freq,duration,type="sawtooth",volume=.08,delay=0){
+ try{
+  soundInit();
+
+  if(!audio)return;
+
+  let o=audio.createOscillator();
+  let g=audio.createGain();
+
+  o.type=type;
+
+  o.frequency.setValueAtTime(
+   freq,
+   audio.currentTime+delay
+  );
+
+  g.gain.setValueAtTime(
+   .001,
+   audio.currentTime+delay
+  );
+
+  g.gain.exponentialRampToValueAtTime(
+   volume,
+   audio.currentTime+delay+.01
+  );
+
+  g.gain.exponentialRampToValueAtTime(
+   .001,
+   audio.currentTime+delay+duration
+  );
+
+  o.connect(g);
+  g.connect(audio.destination);
+
+  o.start(audio.currentTime+delay);
+
+  o.stop(
+   audio.currentTime+delay+duration+.02
+  );
+
+ }catch(e){}
+}
+
+function laserSound(){
+ tone(1100,.05,"square",.10);
+ tone(500,.09,"sawtooth",.06,.03);
+}
+
+function missileSound(){
+ tone(180,.25,"sawtooth",.12);
+ tone(420,.18,"square",.08,.06);
+ tone(700,.12,"triangle",.06,.12);
+}
+
+function bombSound(){
+ tone(90,.45,"sawtooth",.18);
+ tone(55,.55,"square",.14,.08);
+ tone(30,.70,"sine",.16,.18);
+}
+
+function explosionSound(){
+ tone(120,.25,"sawtooth",.14);
+ tone(70,.35,"square",.12,.05);
+ tone(40,.45,"sine",.15,.12);
+}
+
+function energySound(){
+ tone(700,.08,"sine",.07);
+ tone(1000,.10,"sine",.07,.08);
+ tone(1400,.14,"triangle",.06,.16);
+}
+
+function startSound(){
+ tone(220,.12,"square",.07);
+ tone(440,.12,"square",.08,.12);
+ tone(880,.20,"sawtooth",.09,.24);
+}
+
+function levelSound(){
+ tone(500,.12,"square",.08);
+ tone(700,.12,"square",.08,.12);
+ tone(1000,.18,"triangle",.10,.24);
+ tone(1400,.30,"sine",.10,.42);
+}
+
+function gameOverSound(){
+ tone(300,.18,"sawtooth",.10);
+ tone(180,.22,"sawtooth",.12,.18);
+ tone(90,.45,"square",.14,.40);
+}
+
+
+/* ===== HUD ===== */
+
+function hud(){
+ document.getElementById("level").textContent=level;
+ document.getElementById("score").textContent=score
 
 function hud(){
  document.getElementById("level").textContent=level;
@@ -262,6 +334,7 @@ function startGame(){
  power=100;
 
  bullets=[];
+ missiles=[];
  enemies=[];
  crystals=[];
  explosions=[];
@@ -289,6 +362,7 @@ function nextLevel(){
  power=100;
  enemies=[];
  bullets=[];
+ missiles=[];
  crystals=[];
 
  running=true;
@@ -331,7 +405,17 @@ function shoot(){
 
  beep(700,.07);
 }
+function missile(){
+ if(!running)return;
 
+ missiles.push({
+  x:player.x,
+  y:player.y-40,
+  speed:8
+ });
+
+ beep(300,.15);
+}
 function bomb(){
  if(!running)return;
 
@@ -428,7 +512,28 @@ function update(dt){
    }
   }
  }
+for(let i=missiles.length-1;i>=0;i--){
+  let m=missiles[i];
 
+  m.y-=m.speed;
+
+  if(m.y<0){
+   missiles.splice(i,1);
+   continue;
+  }
+
+  for(let j=enemies.length-1;j>=0;j--){
+   let e=enemies[j];
+
+   if(Math.abs(m.x-e.x)<e.w+8 &&
+      Math.abs(m.y-e.y)<e.h+10){
+
+    missiles.splice(i,1);
+    killEnemy(j);
+    break;
+   }
+  }
+     }
  for(let i=enemies.length-1;i>=0;i--){
   let e=enemies[i];
 
@@ -550,7 +655,30 @@ function draw(){
   x.fillStyle="#ffff00";
   x.fillRect(b.x-3,b.y-12,6,18);
  }
+/* MISSILES */
+for(let m of missiles){
+  x.save();
+  x.translate(m.x,m.y);
 
+  x.shadowBlur=18;
+  x.shadowColor="#ff6600";
+
+  x.fillStyle="#ffffff";
+  x.fillRect(-4,-12,8,20);
+
+  x.fillStyle="#ff6600";
+  x.beginPath();
+  x.moveTo(-4,8);
+  x.lineTo(0,18);
+  x.lineTo(4,8);
+  x.closePath();
+  x.fill();
+
+  x.fillStyle="#ffdd00";
+  x.fillRect(-2,-18,4,7);
+
+  x.restore();
+ }
  /* ENEMIES */
  for(let e of enemies){
   x.save();
@@ -675,12 +803,21 @@ document.querySelector(".bomb")
 
 document.querySelector(".bomb")
 .addEventListener("mousedown",bomb);
+ document.getElementById("missileBtn")
+.addEventListener("touchstart",e=>{
+ e.preventDefault();
+ missile();
+},{passive:false});
 
-document.addEventListener("keydown",e=>{
+document.getElementById("missileBtn")
+.addEventListener("mousedown",missile);
+
+ document.addEventListener("keydown",e=>{
  if(e.key==="ArrowLeft")left=true;
  if(e.key==="ArrowRight")right=true;
  if(e.key===" ")shoot();
  if(e.key.toLowerCase()==="b")bomb();
+ if(e.key.toLowerCase()==="m")missile();
 });
 
 document.addEventListener("keyup",e=>{
