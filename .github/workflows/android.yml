@@ -236,15 +236,14 @@ jobs:
       - name: Upload AAB
         uses: actions/upload-artifact@v4
         with:
-          
-      - name: Build Android AAB and APK
+        - name: Build Android AAB and APK
         run: |
           cd android
           chmod +x gradlew
           ./gradlew bundleRelease
           ./gradlew assembleRelease
 
-          echo "Searching for APK..."
+          echo "APK files:"
           find . -type f -name "*.apk" -print
 
       - name: Upload AAB
